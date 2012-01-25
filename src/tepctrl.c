@@ -4,37 +4,39 @@
 
 #define TIMER_THRESHOLD 0x200
 
-#define BUTTON_PINS PINB
-#define BUTTON_LEFT PB1
-#define BUTTON_RIGHT PB2
-#define BUTTON_UP PB7
-#define BUTTON_DOWN PB0
-#define LED_X0 PD0
-#define LED_X1 PD1
-#define LED_X2 PD2
-#define LED_X3 PD3
-#define LED_Y0 PC0
-#define LED_Y1 PC1
-#define LED_Y2 PC2
-#define LED_Y3 PC3
-#define OUT_X PORTD
-#define OUT_Y PORTC
-#define IN_BUTTONS PORTB
-#define OUT_PINS_X DDRD
-#define OUT_PINS_Y DDRC
+#define BUTTON_PINS PINC
+#define BUTTON_FORWARD PC0
+#define BUTTON_LEFT PC1
+#define BUTTON_RIGHT PC2
+#define BUTTON_DRILL PC3
+#define BUTTON_BACKWARD PC4
+#define SOLENOID PB0
+#define MOTOR_X0 PD7
+#define MOTOR_X1 PD5
+#define MOTOR_X2 PD3
+#define MOTOR_X3 PD1
+#define MOTOR_Y0 PD6
+#define MOTOR_Y1 PD4
+#define MOTOR_Y2 PD2
+#define MOTOR_Y3 PD0
+#define DRILL_PORT PORTB
+#define BUTTON_PORT PORTC
+#define MOTOR_PORT PORTD
+#define DRILL_SET DDRB
+#define MOTOR_SET DDRD
 
 static const uint8_t x_outputs[] = {
-	( _BV ( LED_X0 ) | _BV ( LED_X1 ) ),
-	( _BV ( LED_X1 ) | _BV ( LED_X2 ) ),
-	( _BV ( LED_X2 ) | _BV ( LED_X3 ) ),
-	( _BV ( LED_X3 ) | _BV ( LED_X0 ) ),
+	( _BV ( MOTOR_X0 ) | _BV ( MOTOR_X1 ) ),
+	( _BV ( MOTOR_X1 ) | _BV ( MOTOR_X2 ) ),
+	( _BV ( MOTOR_X2 ) | _BV ( MOTOR_X3 ) ),
+	( _BV ( MOTOR_X3 ) | _BV ( MOTOR_X0 ) ),
 };
 
 static const uint8_t y_outputs[] = {
-	( _BV ( LED_Y0 ) | _BV ( LED_Y1 ) ),
-	( _BV ( LED_Y1 ) | _BV ( LED_Y2 ) ),
-	( _BV ( LED_Y2 ) | _BV ( LED_Y3 ) ),
-	( _BV ( LED_Y3 ) | _BV ( LED_Y0 ) ),
+	( _BV ( MOTOR_Y0 ) | _BV ( MOTOR_Y1 ) ),
+	( _BV ( MOTOR_Y1 ) | _BV ( MOTOR_Y2 ) ),
+	( _BV ( MOTOR_Y2 ) | _BV ( MOTOR_Y3 ) ),
+	( _BV ( MOTOR_Y3 ) | _BV ( MOTOR_Y0 ) ),
 };
 
 ISR ( TIMER1_COMPA_vect ) {
@@ -50,27 +52,32 @@ ISR ( TIMER1_COMPA_vect ) {
 	if ( ! ( buttons & _BV ( BUTTON_LEFT ) ) )
 		x_position--;
 
-	if ( ! ( buttons & _BV ( BUTTON_UP ) ) )
+	if ( ! ( buttons & _BV ( BUTTON_FORWARD ) ) )
 		y_position++;
-	if ( ! ( buttons & _BV ( BUTTON_DOWN ) ) )
+	if ( ! ( buttons & _BV ( BUTTON_BACKWARD ) ) )
 		y_position--;
 
 	/* Set outputs according to current position */
-	OUT_X = x_outputs [ x_position % sizeof ( x_outputs ) ];
-	OUT_Y = y_outputs [ y_position % sizeof ( y_outputs ) ];
+	MOTOR_PORT = ( x_outputs [ x_position % sizeof ( x_outputs ) ] |
+		       y_outputs [ y_position % sizeof ( y_outputs ) ] );
+
+	if ( ! ( buttons & _BV ( BUTTON_DRILL ) ) )
+		DRILL_PORT = _BV ( SOLENOID );
 }
 
 int main ( void ) {
 
 	/* Configure input pins with internal pull-up resistors */
-	IN_BUTTONS = ( _BV ( BUTTON_LEFT ) | _BV ( BUTTON_RIGHT ) | _BV ( BUTTON_UP )| 
-		  _BV ( BUTTON_DOWN ) );
+	BUTTON_PORT = ( _BV ( BUTTON_LEFT ) | _BV ( BUTTON_RIGHT ) |
+			_BV ( BUTTON_FORWARD ) | _BV ( BUTTON_BACKWARD ) |
+			_BV ( BUTTON_DRILL) );
 
 	/* Configure output pins */
-	OUT_PINS_X = ( _BV ( LED_X0 ) | _BV ( LED_X1 ) | _BV ( LED_X2 ) | 
-		       _BV ( LED_X3 ) );
-	OUT_PINS_Y = ( _BV ( LED_Y0 ) | _BV ( LED_Y1 ) | _BV ( LED_Y2 ) | 
-		       _BV ( LED_Y3 ) );
+	DRILL_SET = ( _BV ( SOLENOID ) );
+
+	MOTOR_SET = ( _BV ( MOTOR_X0 ) | _BV ( MOTOR_X1 ) | _BV ( MOTOR_X2 ) |
+		     _BV ( MOTOR_X3 ) | _BV ( MOTOR_Y0 ) | _BV ( MOTOR_Y1 ) |
+		     _BV ( MOTOR_Y2 ) | _BV ( MOTOR_Y3 ) );
 
 	/* Configure timer */
 	OCR1A = TIMER_THRESHOLD;
