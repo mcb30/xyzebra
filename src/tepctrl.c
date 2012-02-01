@@ -26,16 +26,16 @@
 #define MOTOR_SET DDRD
 
 static const uint8_t x_outputs[] = {
-	( _BV ( MOTOR_X0 ) | _BV ( MOTOR_X1 ) ),
-	( _BV ( MOTOR_X1 ) | _BV ( MOTOR_X2 ) ),
-	( _BV ( MOTOR_X2 ) | _BV ( MOTOR_X3 ) ),
+	( _BV ( MOTOR_X0 ) | _BV ( MOTOR_X2 ) ),
+	( _BV ( MOTOR_X2 ) | _BV ( MOTOR_X1 ) ),
+	( _BV ( MOTOR_X1 ) | _BV ( MOTOR_X3 ) ),
 	( _BV ( MOTOR_X3 ) | _BV ( MOTOR_X0 ) ),
 };
 
 static const uint8_t y_outputs[] = {
-	( _BV ( MOTOR_Y0 ) | _BV ( MOTOR_Y1 ) ),
-	( _BV ( MOTOR_Y1 ) | _BV ( MOTOR_Y2 ) ),
-	( _BV ( MOTOR_Y2 ) | _BV ( MOTOR_Y3 ) ),
+	( _BV ( MOTOR_Y0 ) | _BV ( MOTOR_Y2 ) ),
+	( _BV ( MOTOR_Y2 ) | _BV ( MOTOR_Y1 ) ),
+	( _BV ( MOTOR_Y1 ) | _BV ( MOTOR_Y3 ) ),
 	( _BV ( MOTOR_Y3 ) | _BV ( MOTOR_Y0 ) ),
 };
 
@@ -57,12 +57,16 @@ ISR ( TIMER1_COMPA_vect ) {
 	if ( ! ( buttons & _BV ( BUTTON_BACKWARD ) ) )
 		y_position--;
 
-	/* Set outputs according to current position */
+	/* Set motor outputs according to current position */
 	MOTOR_PORT = ( x_outputs [ x_position % sizeof ( x_outputs ) ] |
 		       y_outputs [ y_position % sizeof ( y_outputs ) ] );
 
-	if ( ! ( buttons & _BV ( BUTTON_DRILL ) ) )
+	/* Set solenoid output according to drill button */
+	if ( ! ( buttons & _BV ( BUTTON_DRILL ) ) ) {
 		DRILL_PORT = _BV ( SOLENOID );
+	} else {
+		DRILL_PORT = 0;
+	}
 }
 
 int main ( void ) {

@@ -5,7 +5,7 @@ CFLAGS += -W -Wall -Werror -O2
 AVR_CC = avr-gcc
 AVR_OBJCOPY = avr-objcopy
 AVR_OBJDUMP = avr-objdump
-AVR_CFLAGS = $(CFLAGS) -Os -mmcu=atmega48
+AVR_CFLAGS = $(CFLAGS) -Os -mmcu=atmega168
 
 all : simple tepctrl.bin
 
