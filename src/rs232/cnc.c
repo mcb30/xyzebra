@@ -84,6 +84,16 @@ static const struct stepper_position y_stepper[4] = {
 	},
 };
 
+static signed int sign ( signed int k ) {
+	if ( k > 0 ) {
+		return +1;
+	} else if ( k < 0 ) {
+		return -1;
+	} else {
+		return 0;
+	}
+}
+
 /**
  * Update CNC controller
  *
@@ -91,31 +101,52 @@ static const struct stepper_position y_stepper[4] = {
 static void cnc_update ( void ) {
 	static uint16_t x_pos = 0;
 	static uint16_t y_pos = 0;
+	static uint16_t drill_counter;
 	uint8_t stepper_b;
 	uint8_t stepper_d;
-
-	/* Placeholder code.  Remove this code and replace it with
-	 * your own.
-	 */
-
-	/* If CNC is currently active, move around in a 1cm square */
-	if ( cnc_activity ) {
-		if ( ( x_pos == 0 ) && ( y_pos != 0 ) ) {
-			y_pos--;
-		} else if ( y_pos == 1000 ) {
-			x_pos--;
-		} else if ( x_pos == 1000 ) {
-			y_pos++;
-		} else if ( y_pos == 0 ) {
-			x_pos++;
-		}
-	}
+	static uint16_t x_target;
+	static uint16_t y_target;
 
 	/* Update stepper motor outputs */
+	x_pos = x_pos + sign (x_target - x_pos);
+	y_pos = y_pos + sign (y_target - y_pos);
 	stepper_b = ( x_stepper[x_pos % 4].portb | y_stepper[y_pos % 4].portb );
 	stepper_d = ( x_stepper[x_pos % 4].portd | y_stepper[y_pos % 4].portd );
 	PORTB = ( ( PORTB & ~STEPPER_MASK_B ) | stepper_b );
 	PORTD = ( ( PORTD & ~STEPPER_MASK_D ) | stepper_d );
+
+	/* Is position at target? */
+	if  ( ( x_pos != x_target ) || ( y_pos != y_target ) ) {
+		/* Solenoid up */
+		PORT_SOLENOID |= _BV ( SOLENOID );
+		return;
+	}
+
+	/* Is drill counter 0? */
+	if ( drill_counter != 0 ) {
+		drill_counter--;
+
+		/* Solenoid down */
+		PORT_SOLENOID &= ~_BV ( SOLENOID );
+		
+		return;
+	}
+
+	PORT_SOLENOID |= _BV ( SOLENOID );
+
+	/* Does the produced equal the consumer? */
+	if ( target_prod == target_cons ){
+	        cnc_activity = 0; 
+		return;
+	}
+
+	cnc_activity = 1;
+	x_target = targets[target_cons].x;
+	y_target = targets[target_cons].y;
+	target_cons = target_cons +1;
+	drill_counter = 500;
+	return;
+
 }
 
 /**
