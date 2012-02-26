@@ -1,18 +1,34 @@
-AVR_CC = avr-gcc
-AVR_OBJCOPY = avr-objcopy
-AVR_OBJDUMP = avr-objdump
-AVR_CFLAGS = $(CFLAGS) -Os -mmcu=atmega168
+NAME		= rs232
+OBJECTS		= main.o leds.o serial.o
+HZ		= 1000000
+CC_MCU		= atmega168
+CFLAGS		= -DBAUD=9600
+AVRDUDE_MCU	= m168
+AVRDUDE_PROG	= buspirate
+AVRDUDE_PORT	= /dev/ttyUSB0
 
-all :
+CC = avr-gcc
+OBJCOPY = avr-objcopy
+OBJDUMP = avr-objdump
+CFLAGS += -Os -g -W -Wall -Wextra -Werror
+CFLAGS += -mmcu=$(CC_MCU) -DF_CPU=$(HZ)
 
-%.o : %.c
-	$(AVR_CC) $(AVR_CFLAGS) -o $@ -c $<
+all : $(NAME).bin
+
+install : $(NAME).bin
+	avrdude -c $(AVRDUDE_PROG) -P $(AVRDUDE_PORT) -p $(AVRDUDE_MCU) -U $<
+
+$(NAME).elf : $(OBJECTS)
+	$(CC) $(CFLAGS) -o $@ $^
+
+%.o : %.c $(wildcard *.h) Makefile
+	$(CC) $(CFLAGS) -o $@ -c $<
 
 %.bin : %.elf
-	$(AVR_OBJCOPY) -j .text -j .data -O binary $< $@
+	$(OBJCOPY) -j .text -j .data -O binary $< $@
 
 %.lst : %.elf
-	$(AVR_OBJDUMP) -h -S $< > $@
+	$(OBJDUMP) -h -S $< > $@
 
 clean :
 	rm -f *.o *.elf *.bin *.lst
