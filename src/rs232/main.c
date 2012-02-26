@@ -10,6 +10,8 @@
 #include <avr/sleep.h>
 #include "leds.h"
 #include "serial.h"
+#include "cnc.h"
+#include "buttons.h"
 
 /**
  * Main program
@@ -26,6 +28,12 @@ int main ( void ) {
 
 	/* Initialise serial port */
 	serial_init();
+
+	/* Initialise CNC */
+	cnc_init();
+
+	/* Initialise buttons */
+	buttons_init();
 
 	/* Enable interrupts */
 	sei();

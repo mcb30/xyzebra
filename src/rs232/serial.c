@@ -9,6 +9,7 @@
 #include <avr/interrupt.h>
 #include <util/setbaud.h>
 #include "leds.h"
+#include "targets.h"
 #include "serial.h"
 
 /**
