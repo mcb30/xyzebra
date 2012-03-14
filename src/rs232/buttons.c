@@ -28,29 +28,18 @@
  * @v buttons		New button state
  */
 static void buttons_pressed ( uint8_t buttons ) {
-
-	/* Placeholder code.  Remove this code and replace it with
-	 * your own.
-	 */
-
-	/* Set CNC activity flag when "FORWARD" is pressed */
-	if ( ! ( buttons & _BV ( FORWARD ) ) ) {
-		cnc_activity = 1;
-	}
-
-	/* Clear CNC activity flag when "FORWARD" is pressed */
-	if ( ! ( buttons & _BV ( BACKWARD ) ) ) {
-		cnc_activity = 0;
-	}
-
-	/* Set error flag both "LEFT" and "RIGHT" are pressed */
-	if ( ! ( buttons & ( _BV ( LEFT ) | _BV ( RIGHT ) ) ) ) {
-		error = 1;
-	}
-
-	/* Clear error flag when "DONE" is pressed */
-	if ( ! ( buttons & _BV ( DONE ) ) ) {
-		error = 0;
+	static uint8_t clear_error = 0;
+	
+	/* clear error */
+	if ( error ) {
+		if ( ! ( buttons &_BV ( DONE ) ) ) {
+			clear_error = 1;
+		} else {
+			if ( clear_error == 1 ) {
+				clear_error = 0;
+				error = 0;
+			}
+		}
 	}
 }
 
