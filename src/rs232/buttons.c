@@ -22,6 +22,9 @@
 #define BUTTONS_MASK ( _BV ( LEFT ) | _BV ( RIGHT ) | _BV ( DONE ) | \
 		       _BV ( FORWARD ) | _BV ( BACKWARD ) )
 
+uint8_t manual_x;
+uint8_t manual_y;
+
 /**
  * Handle button presses
  *
