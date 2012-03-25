@@ -24,6 +24,7 @@
 
 uint8_t manual_x;
 uint8_t manual_y;
+uint8_t manual_drill;
 
 /**
  * Handle button presses
