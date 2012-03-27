@@ -1,0 +1,1697 @@
+#LyX 1.6.8 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 2cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Resurrecting the TEP Mini-Mill
+\end_layout
+
+\begin_layout Author
+Charlie Blake
+\begin_inset Newline newline
+\end_inset
+
+Philippa Chilvers Woolley
+\begin_inset Newline newline
+\end_inset
+
+Abigail Cox
+\begin_inset Newline newline
+\end_inset
+
+Melisa Kaner
+\end_layout
+
+\begin_layout Abstract
+<insert summary here>
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset FloatList figure
+
+\end_inset
+
+
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Abstract - Charlie - 1
+\end_layout
+
+\begin_layout Section
+Problem - Mel - 1
+\end_layout
+
+\begin_layout Standard
+At Bancroft's School, there is an old and now unfortunatly, disused CNC
+ drill used to drill holes in PCB circuit boards.
+ The control box that is used to both manually and automatically control
+ the CNC drill requests a 'smart card' for operation, which we dont have.
+ Currently, all od the drill holes from printed circuit boards have to be
+ drilled by hand, this is both arduous and inefficient when compared to
+ the previously automated drill.
+ The aim is to replace this control box completely of its functions and
+ perhaps refine some of the finer points in the program.
+ A more long term aim is to physically replace the control box, giving it
+ more of a user interface.
+ The newly created control box would also include manual control.
+\end_layout
+
+\begin_layout Section
+Research
+\end_layout
+
+\begin_layout Subsection
+Original Equipment Manufacture - Abi - 1 
+\end_layout
+
+\begin_layout Standard
+At Cambridge, the team realised that in order to get any sensible use out
+ of the machine, it would be practical to be able to operate it via laptops.
+ Since the machine didn’t have a smart card, it was necessary to find any
+ existing documentation on the product to begin to work out how to control
+ it remotely.
+ Possible manufactures and suppliers of the product were researched online.
+ The few leads which came up were Middlesex University and Mindsets.
+ After a few phone calls, it was discovered that since the machine was made
+ decades ago, it was now considered obsolete.
+ As this was the case, there were not any user manuals or instructions for
+ the machine except by post.
+ Mindsets offered to send some documentation to us, but this would have
+ taken a few weeks.
+\end_layout
+
+\begin_layout Subsection
+Reverse Engineering the Circuit Board - Pippa - 4
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Did we still ask them to send documents to school? What did we do instead?
+\end_layout
+
+\begin_layout Subsection
+Opening up the CNC Drill 
+\end_layout
+
+\begin_layout Standard
+Upon opening up the CNC drill it was found that, as suspected, it was controlled
+ using a uni-polar stepper motor.
+ These are different from conventional motors because of the following:
+\end_layout
+
+\begin_layout Itemize
+Brushless – (if brushed, with friction could create sparks which especially
+ in our case is undesirable)
+\end_layout
+
+\begin_layout Itemize
+Good low speed and holding torque – ( can hold particular positions in rotation
+ even without a power input)
+\end_layout
+
+\begin_layout Itemize
+Open loop positioning – ( Can position the shaft in precise, predictable
+ positions )
+\end_layout
+
+\begin_layout Itemize
+Load independent ( The rotation speed of the motor is free of the load)
+\end_layout
+
+\begin_layout Subsection
+Motor Control Circuitry
+\end_layout
+
+\begin_layout Standard
+Current flowing though a coil produces a magnetic field, this in turn, attracts
+ a ‘permenanent magnet rotor’ which is connected to the shaft of the motor
+ as shown in figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:stepper-motor"
+
+\end_inset
+
+.
+ By reversing the current through two coils of the stepper motor in a particular
+ sequence, the rotor is influenced.
+ There are two coils and two directions, giving us a 
+\begin_inset Quotes eld
+\end_inset
+
+4-phase sequence
+\begin_inset Quotes erd
+\end_inset
+
+.
+ By getting this sequence right, we can make the motor turn smoothly.
+ This 
+\begin_inset Quotes eld
+\end_inset
+
+4-phase sequence
+\begin_inset Quotes erd
+\end_inset
+
+ is repeated many times before a complete revolution.
+ This is created using 4 electromagnets equidistant from one another and
+ once each electromagnet is turned on in turn rotating the shaft by 1.8°.
+ This allows the motor to turn in 
+\series bold
+steps, 
+\series default
+more specifically there are 200 steps in one rotation.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename stepper_motor.png
+	width 60col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Conceptual diagram of a stepper motor
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:stepper-motor"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Manual Control - Switches - Mel - 3
+\end_layout
+
+\begin_layout Standard
+By using a stepper motor ordered from 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+www.rapidonline.com
+\end_layout
+
+\end_inset
+
+, it was possible to experiment finding the correct wiring sequence without
+ the threat of harming the motor inside of the drill.
+ By connecting each of the inputs to a series of switches in a spare prototype
+ board it was possible to turn on each of the 
+\begin_inset Quotes eld
+\end_inset
+
+bits
+\begin_inset Quotes erd
+\end_inset
+
+ in order to find the correct sequence.
+ 
+\end_layout
+
+\begin_layout Standard
+The switches were arranged in such a way that a logic '1' was created when
+ the switch was pressed, this corresponds to the logic levels used later
+ on.
+\end_layout
+
+\begin_layout Standard
+In order to find the correct sequence, created a diagram of the stepper
+ motor inputs 
+\series bold
+[insert diagram]
+\series default
+ and logically work out each of the sequences.
+ As mentioned earlier, if a current is passed through one of the stepper
+ motor inputs the polarity of the magnet changes.
+ As the stepper motor being used is a unipole stepper motor if any two adjacent
+ poles are 'on' at the same time, the polarity between the two magnets essential
+ly cancel out.
+ This shouldn't move/rotate the shaft of the motor.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../../elec/XYcontroller.eps
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Switch with Stepper motor
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Switch-with-Stepper"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+After experimenting with different sequences, the following sequences that
+ were found worked best:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="3" columns="5">
+<features>
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ROTATION
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+LEFT
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1100
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0110
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0011
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1001
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+RIGHT
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0011
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0110
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1100
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1001
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This method, however, proved to be very limited as it was not possible to
+ see the speed and torque limitations of the motor.
+ 
+\end_layout
+
+\begin_layout Subsection
+Using the 4017 Decade Counter - Mel - 2
+\end_layout
+
+\begin_layout Standard
+It was then interesting to find how the motor would run if we increased
+ the speed of these incoming bits, as the switches could only be pressed
+ in sequence at a limited speed.
+ To do this we used a 
+\begin_inset Quotes eld
+\end_inset
+
+555 Astable
+\begin_inset Quotes erd
+\end_inset
+
+ and a 
+\begin_inset Quotes eld
+\end_inset
+
+4017 Decade Counter
+\begin_inset Quotes erd
+\end_inset
+
+, as shown in figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:stepper-4017"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+To find the correct wiring configuration, we created a table in an attempt
+ to find the correct sequence of inputs.
+\end_layout
+
+\begin_layout Standard
+A B C D 
+\end_layout
+
+\begin_layout Standard
+1 0 1 0 
+\end_layout
+
+\begin_layout Standard
+1 0 0 1
+\end_layout
+
+\begin_layout Standard
+0 1 0 1
+\end_layout
+
+\begin_layout Standard
+0 1 1 0
+\end_layout
+
+\begin_layout Standard
+Arranging the inputs so that (as found earlier) each of the inputs have
+ to be adjacent:
+\end_layout
+
+\begin_layout Standard
+C A D B
+\end_layout
+
+\begin_layout Standard
+1 1 0 0
+\end_layout
+
+\begin_layout Standard
+0 1 1 0
+\end_layout
+
+\begin_layout Standard
+0 0 1 1 
+\end_layout
+
+\begin_layout Standard
+1 0 0 1
+\end_layout
+
+\begin_layout Standard
+Using the decade counter (which cycles sequentially through its inputs )
+ We could create the inputs of
+\end_layout
+
+\begin_layout Standard
+C A D B
+\end_layout
+
+\begin_layout Standard
+1 0 0 0
+\end_layout
+
+\begin_layout Standard
+0 1 0 0
+\end_layout
+
+\begin_layout Standard
+0 0 1 0
+\end_layout
+
+\begin_layout Standard
+0 0 0 1
+\end_layout
+
+\begin_layout Standard
+This would still rotate the shaft of the stepper motor smoothly, but not
+ have as much torque.
+ The origionally desired logic could be obtained using an arrangment of
+ diodes at the 4017 outputs, but for testing and time purposes, the current
+ arrangment served its purpose (As an increased torque wasn't needed in
+ this situation).
+ 
+\end_layout
+
+\begin_layout Standard
+To a suitable frequency for the 555 astable, it was taken into account that
+ the stepper motor would have to rotate in 200 steps, a frequency of around
+ 100Hz (pulsing at 100 times per second) would allow the stepper motor to
+ rotate fully in 2 seconds.
+ This speed was unlikely tp surpass the limits of the stepper motor.
+ After connecting this to the decade counter, a Darlington Driver was required
+ in order to drive the stepper motor without burning out the 4017 decade
+ counter.
+ To increase the rotation speed, it was merely needed to change the components
+ of the frequency generator (555 Astable), more specifically, the capacitor
+ and resistor values.
+ Using the E12 series of resistors, a frequency of around 120Hz was created,
+ which is a close enough experimental value to serve its purpose.Values were
+ calculated for the needed resistors and capacitors using 1.44/(R1 + 2R2)C.
+ The final values used were 1 micro farad, R1 = 10K Ohms, R2 = 1K Ohms.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../../elec/stepper_4017.eps
+	rotateAngle 270
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Simple stepper motor driver
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:stepper-4017"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This worked as expected and it was now possible to proceed onto a more automated
+ method of controlling the stepper motor.
+\end_layout
+
+\begin_layout Subsection
+Using a Laptop - Mel - 2
+\end_layout
+
+\begin_layout Standard
+The rotation speed of the motor depended on the value of the capacitor in
+ the astable, wanting to experiment further the values of the capacitor
+ were increased to such a degree that there was too much torque and the
+ motor wouldn’t turn.
+ It was here that the limits of the motor were found.
+ After confirmation that this method worked, the next step was to utilise
+ this with laptops.
+ A simple program was devised to scroll through the outputs in a specified
+ sequence.
+ [refer to appendix?] As with using the laptops, the frequency generated
+ would greatly surpass the limit of 200Hz, to recitfy this the program had
+ to intergrate 'sleep' commands.
+ This made it possible to easily to vary the speed of rotation as well as
+ the direction.
+ 
+\end_layout
+
+\begin_layout Standard
+The next step was to use this idea with the CNC drill, beginning with controllin
+g individual axes.
+ The programming lines of the laptops were connected as were the components
+ to the inputs of the drill (previously where the control box had been situated)
+, a simple program was created to cycle through outputs representing the
+ 4017 outputs and noted in which direction each of the axes moved.
+ We then wanted to be able to have the drill move to a specific co-ordinate,
+ we did this by creating variables 
+\begin_inset Quotes eld
+\end_inset
+
+x_target
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+y_target
+\begin_inset Quotes erd
+\end_inset
+
+ which would be variables that the 'user' types in themselves, in the command
+ prompt.
+ This would be constantly corresponding to the variables 
+\begin_inset Quotes eld
+\end_inset
+
+x_position
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+y_position
+\begin_inset Quotes erd
+\end_inset
+
+ which fittingly correspond to the current positions of the drill, in the
+ x and y position.
+ The drill stops moving once x_target is equal to x_position (the same for
+ the y co-ordinates), if the x and y postions are less than the targets,
+ then the x and y variables increment by one every clocked pulse coming
+ from the IC.
+ 
+\end_layout
+
+\begin_layout Standard
+Error messages were also implemented in the event of unrecognized co-ordinates
+ coming from the interface.
+ This ensures that the program doesn't go into an unexpected error state
+ during movement or even if the drill is moving to unspecified co-ordinates
+ which would prove more troublesome in the future.
+ 
+\end_layout
+
+\begin_layout Standard
+Reflecting that the long term aim of the project was to interpret drill
+ files, the next milestone would be to directly extrapolate the X and Y
+ co-ordinates from the drill files and use them as x_target and y_target
+ respectively.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+[insert from code??]
+\end_layout
+
+\begin_layout Section
+Solution
+\end_layout
+
+\begin_layout Subsection
+Manual Control & RS232 PCBs - Abi - 1
+\end_layout
+
+\begin_layout Subsection
+Flowcharts & Event-based Programming - Abi - 3
+\end_layout
+
+\begin_layout Subsection
+CNC Control - Mel - 5/6
+\end_layout
+
+\begin_layout Standard
+After the success of controlling the CNC with co-ordinates typed in by the
+ user, the next step would be interepreting individual co-ordinates from
+ drill files.
+ The next step was to make the target x and y variables update automatically
+ according to a list.
+ For example, a block of text containing x and y co-ordinates would be translate
+d into x_target and y_target co-ordinates.
+ These were called the producer and consumer, the program starts off with
+ a number of co-ordinates in the producer (these are the co-ordinates typed
+ in) and once these are processed, or 
+\series bold
+consumed, 
+\series default
+these become the consumer - finished co-ordinates.
+ But, if there were any unrecognized characters (ones that dont translate
+ into co-ordinates), there needed to be a way to make sure the program wouldn't
+ register them as co-ordinates and go into a random error state.
+ It was here we further utilised error states in using colour coded LEDs,
+ Red meaning error, Orange meaning processing and Green meaning idle.
+ 
+\end_layout
+
+\begin_layout Standard
+After the new x and y targets were found, the program needed to recognize
+ where those co-ordinates were in relative to its position.
+ To do this, a 'sign function' was created which uses the principle that
+ If the x_target - x_position was positive (I.e the x_position relative to
+ the x_target was positive), then it needed to carry on moving to the right
+ (right is positive in this case), if it was negative then it needed to
+ move left and if it was 0, then the x_position had reached x_target and
+ that axis could stop moving.
+ This would result in a square motion of the drill.
+ To make the stepper rotate accordingly (clockwise or anticlockwise), the
+ 'mod' function was used, this told the stepper motor what orientation the
+ shaft should be.
+ For example, we had a storage device within the program containing 4 outputs,
+ recognizable as [1100 0110 0011 1001] by using the mod function on x_position
+ and y_position, the stepper motor would know whether to rotate positively
+ (clockwise) or negatively (anticlockwise).
+ The stepper motor position variables were called xstepperpos and ystepperpos
+ respecitvely.
+\end_layout
+
+\begin_layout Standard
+For a safety feature (as well as practicality), if the dril had not reached
+ its position, (i.e.
+ x_target isn't equal to x_position and y_target isn't equal to y_position)
+ the drill would always be up.
+ Only once the drill is in it's desired position would the drill go down
+ and drill the hole.
+ To make sure the motion wasn't too fast (otherwise this could break the
+ drill bit but also dril a non-uniform hole) a timer was implemented into
+ the system (Being to made to last a couple of seconds, which was acceptable).
+ 
+\end_layout
+
+\begin_layout Standard
+When the counter equalled 0, if there were no more co-ordinates to drill
+ (I.e.
+ the number of co-ordinates in the producer is equal to the consumer - all
+ the produced co-ordinates had been 'consumed'), the activity led is set
+ low (to signify that the program has finsihed) and the program ends.
+ If the producer doesnt equal the consumer, then one is added to the consumer
+ (as the program as drilled one co-ordinate, so it needs to be consumed)
+ and the next producer becomes the new target.
+ (We again split up the producer and consumer into it's x and y constituents.)
+\end_layout
+
+\begin_layout Standard
+But, as the x and y target variables have a limited capacity, if there were
+ any new co-ordinates coming into the variable when it is still processing
+ current ones (ie more co-ordinates than can be stored), they would be overwritt
+en.
+ To prevent this, flow control needed to be implemented.
+\end_layout
+
+\begin_layout Subsubsection
+Flow Control
+\end_layout
+
+\begin_layout Standard
+Flow controll is essentially a buffer that is created between (in this case)
+ the computer and the PCB (circuit) that halts the flow of data untill it
+ can be taken in/there is a space for it to be processed.
+\end_layout
+
+\begin_layout Standard
+Though, after referring to our circuit diagram 
+\series bold
+[refer to circuit diagram here]
+\series default
+ it was found that there physically wasn't any space on our current circuit
+ board for the flow control lines to be implemented.
+ It was then that we went back to eeschema (circuit diagram software) to
+ find any free data lines.
+ The lines we had to change were RTS and CTS, R - Recieve, T - Transmitt.When
+ RTS is high (1), this is telling the computer that it is ready to recieve
+ data, low meaning it has to be halted.
+ In order to understand fully what output lines we could untilise, we created
+ the following table:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="4">
+<features>
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+COMPUTER
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+TO/FROM
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+CIRCUIT
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+MICROCONTROLLER
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+TD
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+TO
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+RD
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+TXD
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+RD
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+FROM
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+TD
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+RXD
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+RTS
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+TO
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+CTS
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+----
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+CTS
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+FROM
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+RTS
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+MISO
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+As we aren't actually recieving any data from the circuit (we are feeding
+ it co-ordinates), we really only needed one free data line, here we used
+ MISO, only 3 connections on the current PCB.
+ 
+\series bold
+[summarise with flowcharts and modified circuit diagram?] 
+\end_layout
+
+\begin_layout Subsection
+Interpreting Excellon Drill Files - Charlie - Up to 8
+\end_layout
+
+\begin_layout Standard
+The Excellon file format is used to drive CNC milling / drilling machines.
+ These files contain information regarding drill specifications and drill
+ co-ordinates using the extension '.drl'.
+ When a PCB design program produces a template to be chemically etcshed,
+ it also creates one of these files to map where holes need to be drilled.
+ We receive one of these files over an RS232 link and one of our tasks is
+ to write a program which can interpret it.
+\end_layout
+
+\begin_layout Standard
+Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:excellon-sample"
+
+\end_inset
+
+ shows a typical example of an Excellon drill file:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout LyX-Code
+M48
+\end_layout
+
+\begin_layout LyX-Code
+;DRILL file {Pcbnew (2011-dec-21)-stable} date Sun 19 Feb 2012 02:32:52
+ GMT
+\end_layout
+
+\begin_layout LyX-Code
+;FORMAT={-:-/ absolute / inch / decimal}
+\end_layout
+
+\begin_layout LyX-Code
+FMAT,2
+\end_layout
+
+\begin_layout LyX-Code
+INCH,TZ
+\end_layout
+
+\begin_layout LyX-Code
+T1C0.032
+\end_layout
+
+\begin_layout LyX-Code
+T2C0.045
+\end_layout
+
+\begin_layout LyX-Code
+T3C0.120
+\end_layout
+
+\begin_layout LyX-Code
+%
+\end_layout
+
+\begin_layout LyX-Code
+G90
+\end_layout
+
+\begin_layout LyX-Code
+G05
+\end_layout
+
+\begin_layout LyX-Code
+M72
+\end_layout
+
+\begin_layout LyX-Code
+T1
+\end_layout
+
+\begin_layout LyX-Code
+X3.350Y4.475
+\end_layout
+
+\begin_layout LyX-Code
+X3.350Y4.575
+\end_layout
+
+\begin_layout LyX-Code
+X3.450Y4.475
+\end_layout
+
+\begin_layout LyX-Code
+X4.872Y3.586
+\end_layout
+
+\begin_layout LyX-Code
+X5.200Y2.900
+\end_layout
+
+\begin_layout LyX-Code
+X5.272Y3.986
+\end_layout
+
+\begin_layout LyX-Code
+X5.272Y4.164
+\end_layout
+
+\begin_layout LyX-Code
+X5.300Y2.800
+\end_layout
+
+\begin_layout LyX-Code
+X5.900Y3.900
+\end_layout
+
+\begin_layout LyX-Code
+X6.200Y3.400
+\end_layout
+
+\begin_layout LyX-Code
+X6.200Y3.500
+\end_layout
+
+\begin_layout LyX-Code
+X6.200Y3.600
+\end_layout
+
+\begin_layout LyX-Code
+T2
+\end_layout
+
+\begin_layout LyX-Code
+X5.350Y3.150
+\end_layout
+
+\begin_layout LyX-Code
+X5.850Y2.700
+\end_layout
+
+\begin_layout LyX-Code
+X6.050Y2.875
+\end_layout
+
+\begin_layout LyX-Code
+X6.250Y2.700
+\end_layout
+
+\begin_layout LyX-Code
+X6.450Y2.875
+\end_layout
+
+\begin_layout LyX-Code
+X6.750Y3.270
+\end_layout
+
+\begin_layout LyX-Code
+X6.750Y3.380
+\end_layout
+
+\begin_layout LyX-Code
+X6.750Y3.485
+\end_layout
+
+\begin_layout LyX-Code
+T3
+\end_layout
+
+\begin_layout LyX-Code
+X3.275Y3.150
+\end_layout
+
+\begin_layout LyX-Code
+X3.275Y4.150
+\end_layout
+
+\begin_layout LyX-Code
+X3.950Y3.250
+\end_layout
+
+\begin_layout LyX-Code
+X6.800Y3.000
+\end_layout
+
+\begin_layout LyX-Code
+X6.800Y4.300
+\end_layout
+
+\begin_layout LyX-Code
+T0
+\end_layout
+
+\begin_layout LyX-Code
+M30
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+An Excellon drill file
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:excellon-sample"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This file can be broken down into two separate sections: the header and
+ the co-ordinate list.
+\end_layout
+
+\begin_layout Subsubsection
+The Header
+\end_layout
+
+\begin_layout Standard
+This contains information regarding the set-up of the machine and the format
+ of the co-ordinate list:
+\end_layout
+
+\begin_layout LyX-Code
+M48
+\end_layout
+
+\begin_layout Standard
+This indicates that the file has begun.
+\end_layout
+
+\begin_layout LyX-Code
+;DRILL file {Pcbnew (2011-dec-21)-stable} date Sun 19 Feb 2012 02:32:52
+ GMT
+\end_layout
+
+\begin_layout LyX-Code
+;FORMAT={-:-/ absolute / inch / decimal} FMAT,2 INCH,TZ T1C0.032 T2C0.045
+ T3C0.120 % G90 G05
+\end_layout
+
+\begin_layout Standard
+Lines that begin with a semicolon are comments and can be ignored.
+\end_layout
+
+\begin_layout LyX-Code
+FMAT,2
+\end_layout
+
+\begin_layout Standard
+The code is in the newer 2nd format.
+\end_layout
+
+\begin_layout LyX-Code
+INCH, TZ
+\end_layout
+
+\begin_layout Standard
+The co-ordinates are in inches and trailing zeros have been added where
+ nessecary
+\end_layout
+
+\begin_layout LyX-Code
+TaCb
+\end_layout
+
+\begin_layout Standard
+Tool (drill-bit) 'a' has a diameter of 'b'
+\end_layout
+
+\begin_layout LyX-Code
+%
+\end_layout
+
+\begin_layout Standard
+Beginning of new pattern (note: Excellon files are often viewed as a series
+ of patterns rather than a header and co-ordinate list.
+ However, for our purposes patterns are irrelevant and we can ignore the
+ 
+\begin_inset Quotes eld
+\end_inset
+
+%
+\begin_inset Quotes erd
+\end_inset
+
+ symbol entirely)
+\end_layout
+
+\begin_layout LyX-Code
+G90
+\end_layout
+
+\begin_layout Standard
+The co-ordinates are absolute (as opposed to relative - G91, where the previous
+ co-ordinate is always treated as 0,0)
+\end_layout
+
+\begin_layout LyX-Code
+G05
+\end_layout
+
+\begin_layout Standard
+Drill mode (as opposed to routing mode – G00)
+\end_layout
+
+\begin_layout Standard
+There are many other possible header commands which for our purposes we
+ do not need to consider.
+ For a comprehensive list see 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://web.archive.org/web/20071030075236/http://www.excellon.com/manuals/program.htm
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+The Co-ordinate List
+\end_layout
+
+\begin_layout LyX-Code
+Tn
+\end_layout
+
+\begin_layout Standard
+Insert tool 'n'
+\end_layout
+
+\begin_layout LyX-Code
+XaYb
+\end_layout
+
+\begin_layout Standard
+X co-ordinate = a, Y co-ordinate = b
+\end_layout
+
+\begin_layout LyX-Code
+T0
+\end_layout
+
+\begin_layout Standard
+Unload current tool
+\end_layout
+
+\begin_layout LyX-Code
+M30
+\end_layout
+
+\begin_layout Standard
+End program
+\end_layout
+
+\begin_layout Subsubsection
+Our Solution
+\end_layout
+
+\begin_layout Standard
+How the program works
+\end_layout
+
+\begin_layout Standard
+Here is a flowchart for a simpler version of this program:
+\end_layout
+
+\begin_layout Standard
+Understanding the simplified program
+\end_layout
+
+\begin_layout Standard
+This program is an Event Based Parser.
+ It reads the Excellon file 1 character at a time.
+\end_layout
+
+\begin_layout Standard
+This simplified version is only designed to handle lines of co-ordinates.
+\end_layout
+
+\begin_layout Standard
+The program is begins when it receives an interrupt.
+ This interrupt is triggered when a character is sent.
+ “rs232-activity” is handled by a separate program.
+ When it is > 0 we want to show that there is data being sent along the
+ rs232 cable.
+ Therefore we set it high every time this program is triggered..
+\end_layout
+
+\begin_layout Standard
+The program first looks to see if the sent character is a number.
+ If it is not, then we check if it is an 'X', a 'Y' or a '
+\backslash
+n'.
+\end_layout
+
+\begin_layout Standard
+If it is an 'X' or a 'Y' the variable “state” is changed to the corresponding
+ letter.
+\end_layout
+
+\begin_layout Standard
+If it is a '
+\backslash
+n' then the current set of co-ordinates stored in “X_target” and “Y_target”
+ are handled by a sub-process which passes them on to a separate program.
+ “state” is then set to empty or “-”, and “X_target” and “Y_target” are
+ reset.
+ We do this as “
+\backslash
+n” indicates that the current set of co-ordinates has been past and the
+ next set is about to be sent.
+\end_layout
+
+\begin_layout Standard
+If a letter is passed which is not one of the above we assume there has
+ been a malfunction somewhere, so we set “error” to 1 and reset “state”,
+ “X_target” and “Y_target”.
+\end_layout
+
+\begin_layout Standard
+If a number has been sent then the program first checks the value of “state”.
+ If the state is 'X' or 'Y' then the number will be stored in “X_target”
+ or “Y_target” respectively.
+ However, if “state” is '-' , something has gone wrong, so we do not store
+ the number, we set “error” to 1 and we reset “state”, “X_target” and “Y_target”.
+\end_layout
+
+\begin_layout Standard
+When a number is stored in “X_target” or “Y_target” we do not want to overwrite
+ the current value, as the co-ordinates are being sent one digit at a time
+ and each co-ordinate has multiple digits.
+ We wish to add each subsequent digit on to the end of the current value,
+ so the + operator will not work either.
+\end_layout
+
+\begin_layout Standard
+To demonstrate this, consider the number 42 being sent to our program.
+\end_layout
+
+\begin_layout Standard
+Initially we store the first number, 4, in the relevant target variable.
+\end_layout
+
+\begin_layout Standard
+If we simply store the following 2 in the variable it will equal 2, rather
+ that 42.
+\end_layout
+
+\begin_layout Standard
+If we + the 2 to the variable it will equal 6, which is also incorrect.
+\end_layout
+
+\begin_layout Standard
+The solution is to multiply the target variable by 10 and then add the next
+ character.
+ This way when the 2 is sent our 4 is changed to 40.
+ The 2 is then added, giving us 42 as required.
+\end_layout
+
+\begin_layout Standard
+However, this simple program does not take into account the specifics of
+ the Excellon format.
+ Here is an explanation of our final solution which takes these nuances
+ into account:
+\end_layout
+
+\begin_layout Standard
+Explanation of our final program
+\end_layout
+
+\begin_layout Standard
+...
+\end_layout
+
+\begin_layout Subsection
+Buttons - Abi - 3
+\end_layout
+
+\begin_layout Section
+Evaluation and Summary - Abi -1
+\end_layout
+
+\begin_layout Section
+Future Work
+\end_layout
+
+\begin_layout Subsection
+Callibrations and Matrices - Pippa - 4
+\end_layout
+
+\begin_layout Section
+Acknowledgements - Pippa - 1
+\end_layout
+
+\begin_layout Section
+Appendices
+\end_layout
+
+\begin_layout Subsection
+Code Listings
+\end_layout
+
+\begin_layout Subsection
+Schematics
+\end_layout
+
+\begin_layout Subsection
+PCB Layouts
+\end_layout
+
+\end_body
+\end_document
