@@ -33,10 +33,11 @@ uint8_t manual_drill;
  */
 static void buttons_pressed ( uint8_t buttons ) {
 	static uint8_t clear_error = 0;
+	uint8_t temp;
 	
 	/* clear error */
 	if ( error ) {
-		if ( ! ( buttons &_BV ( DONE ) ) ) {
+		if ( ! ( buttons & _BV ( DONE ) ) ) {
 			clear_error = 1;
 		} else {
 			if ( clear_error == 1 ) {
@@ -45,6 +46,34 @@ static void buttons_pressed ( uint8_t buttons ) {
 			}
 		}
 	}
+
+	/* Set manual_drill=1 iff D button is pressed */
+	if ( ! ( buttons & _BV ( DONE ) ) ) {
+		manual_drill = 1;
+	} else {
+		manual_drill = 0;
+	}
+
+	/* Set manual_y to +1, 0 or -1 based in F and B buttons */
+	temp = 0;
+	if ( ! ( buttons & _BV ( FORWARD ) ) ) {
+		temp += 1;
+	}
+	if ( ! ( buttons & _BV ( BACKWARD ) ) ) {
+		temp -= 1;
+	}
+	manual_y = temp;
+
+	
+	/* Set manual_x to +1, 0 or -1 based in L and R buttons */ 
+	temp = 0;
+	if ( ! ( buttons & _BV ( LEFT ) ) ) {
+		temp -= 1;
+	}
+	if ( ! ( buttons & _BV ( RIGHT ) ) ) {
+		temp += 1;
+	}
+	manual_x = temp;
 }
 
 /**
