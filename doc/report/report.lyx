@@ -820,12 +820,6 @@ Reflecting that the long term aim of the project was to interpret drill
  respectively.
 \end_layout
 
-\begin_layout Standard
-
-\series bold
-[insert from code??]
-\end_layout
-
 \begin_layout Subsection
 Proof of Concept - Charlie - 2
 \end_layout
@@ -1215,6 +1209,125 @@ these become the consumer - finished co-ordinates.
 \end_layout
 
 \begin_layout Standard
+To check to see if the drill was in an error state, this code was implemented:
+\end_layout
+
+\begin_layout LyX-Code
+/** * Update CNC controller * */ 
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+static void cnc_update ( void ) { static uint16_t x_pos = 0; static uint16_t
+ y_pos = 0; static uint16_t drill_counter; uint8_t stepper_b; uint8_t stepper_d;
+ static uint16_t x_target; static uint16_t y_target; 
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+/* Check to see if there's an error */ 
+\end_layout
+
+\begin_layout LyX-Code
+if ( error == 1 ) { PORT_SOLENOID |= _BV ( SOLENOID ); return; } 
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+/* Update stepper motor outputs */ 
+\end_layout
+
+\begin_layout LyX-Code
+x_pos = x_pos + sign (x_target - x_pos); 
+\end_layout
+
+\begin_layout LyX-Code
+y_pos = y_pos + sign (y_target - y_pos);
+\end_layout
+
+\begin_layout LyX-Code
+stepper_b = ( x_stepper[x_pos % 4].portb | y_stepper[y_pos % 4].portb );
+\end_layout
+
+\begin_layout LyX-Code
+stepper_d = ( x_stepper[x_pos % 4].portd | y_stepper[y_pos % 4].portd ); PORTB
+ = ( ( PORTB & ~STEPPER_MASK_B ) | stepper_b );
+\end_layout
+
+\begin_layout LyX-Code
+PORTD = ( ( PORTD & ~STEPPER_MASK_D ) | stepper_d );
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+/* Is position at target? */ 
+\end_layout
+
+\begin_layout LyX-Code
+if ( ( x_pos != x_target ) || ( y_pos != y_target ) ) { 
+\end_layout
+
+\begin_layout LyX-Code
+/* Solenoid down */ PORT_SOLENOID |= _BV ( SOLENOID ); 
+\end_layout
+
+\begin_layout LyX-Code
+return; 
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+/* Is drill counter 0? */ 
+\end_layout
+
+\begin_layout LyX-Code
+if ( drill_counter != 0 ) { drill_counter--;
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+/* Solenoid up */ 
+\end_layout
+
+\begin_layout LyX-Code
+PORT_SOLENOID &= ~_BV ( SOLENOID ); 
+\end_layout
+
+\begin_layout LyX-Code
+return; 
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+PORT_SOLENOID |= _BV ( SOLENOID ); 
+\end_layout
+
+\begin_layout Standard
 After the new x and y targets were found, the program needed to recognize
  where those co-ordinates were in relative to its position.
  To do this, a 'sign function' was created which uses the principle that
@@ -1233,6 +1346,50 @@ After the new x and y targets were found, the program needed to recognize
  (clockwise) or negatively (anticlockwise).
  The stepper motor position variables were called xstepperpos and ystepperpos
  respecitvely.
+\end_layout
+
+\begin_layout Standard
+The 'sign' function was then developed into code:
+\end_layout
+
+\begin_layout LyX-Code
+static signed 
+\end_layout
+
+\begin_layout LyX-Code
+int sign ( signed int k ) { 
+\end_layout
+
+\begin_layout LyX-Code
+if ( k > 0 ) { return +1; 
+\end_layout
+
+\begin_layout LyX-Code
+} 
+\end_layout
+
+\begin_layout LyX-Code
+else if ( k < 0 ) 
+\end_layout
+
+\begin_layout LyX-Code
+{ 
+\end_layout
+
+\begin_layout LyX-Code
+return -1;
+\end_layout
+
+\begin_layout LyX-Code
+} 
+\end_layout
+
+\begin_layout LyX-Code
+else { return 0; }
+\end_layout
+
+\begin_layout LyX-Code
+} 
 \end_layout
 
 \begin_layout Standard
@@ -1266,6 +1423,138 @@ But, as the x and y target variables have a limited capacity, if there were
  current ones (ie more co-ordinates than can be stored), they would be overwritt
 en.
  To prevent this, flow control needed to be implemented.
+\end_layout
+
+\begin_layout Standard
+In order to make the programming easier, a flowchart was created to summarise
+ each command/line of code.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename Target flowchart.eps
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This was then put into the following code:
+\end_layout
+
+\begin_layout Standard
+To check if the producer is equal to the consumer, (The list of co-ordinates
+ has been completed)
+\end_layout
+
+\begin_layout LyX-Code
+/* Does the produced equal the consumer? */
+\end_layout
+
+\begin_layout LyX-Code
+if ( targets_empty() ){
+\end_layout
+
+\begin_layout LyX-Code
+cnc_activity = 0;
+\end_layout
+
+\begin_layout LyX-Code
+x_target = ( manual_x + x_target );
+\end_layout
+
+\begin_layout LyX-Code
+y_target = ( manual_y + y_target );
+\end_layout
+
+\begin_layout LyX-Code
+if ( manual_drill ) {
+\end_layout
+
+\begin_layout LyX-Code
+PORT_SOLENOID &= ~_BV ( SOLENOID );
+\end_layout
+
+\begin_layout LyX-Code
+} else {
+\end_layout
+
+\begin_layout LyX-Code
+PORT_SOLENOID |= _BV ( SOLENOID );
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+return;
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+cnc_activity = 1;
+\end_layout
+
+\begin_layout LyX-Code
+x_target = targets[ target_cons % NUM_TARGETS ].x;
+\end_layout
+
+\begin_layout LyX-Code
+y_target = targets[ target_cons % NUM_TARGETS ].y;
+\end_layout
+
+\begin_layout LyX-Code
+target_cons = target_cons +1;
+\end_layout
+
+\begin_layout LyX-Code
+drill_counter = 500;
+\end_layout
+
+\begin_layout LyX-Code
+return;
+\end_layout
+
+\begin_layout Standard
+The 'include' function made it possible to use variables being used in other
+ branches of programs, i.e the ability to split up one program into smaller
+ chunks.
+\end_layout
+
+\begin_layout LyX-Code
+#include <avr/io.h> 
+\end_layout
+
+\begin_layout LyX-Code
+#include <avr/interrupt.h>
+\end_layout
+
+\begin_layout LyX-Code
+#include "leds.h" 
+\end_layout
+
+\begin_layout LyX-Code
+#include "targets.h" 
+\end_layout
+
+\begin_layout LyX-Code
+#include "buttons.h"
+\end_layout
+
+\begin_layout LyX-Code
+#include "cnc.h"
+\end_layout
+
+\begin_layout Standard
+This way, as other members of the group were working on other aspects of
+ the program, the complete program would be updated as the group members
+ updated theirs individually.ls
 \end_layout
 
 \begin_layout Subsubsection
