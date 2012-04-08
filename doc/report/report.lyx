@@ -127,19 +127,66 @@ Original Equipment Manufacture - Abi - 1
 \end_layout
 
 \begin_layout Standard
-At Cambridge, the team realised that in order to get any sensible use out
+At Cambridge, it was realised that in order to get any sensible use out
  of the machine, it would be practical to be able to operate it via laptops.
- Since the machine didn’t have a smart card, it was necessary to find any
- existing documentation on the product to begin to work out how to control
+ Since there was no smart card with the machine, it was necessary to find
+ any existing documentation on the product to begin to work out how to control
  it remotely.
  Possible manufactures and suppliers of the product were researched online.
- The few leads which came up were Middlesex University and Mindsets.
- After a few phone calls, it was discovered that since the machine was made
- decades ago, it was now considered obsolete.
+ The first mention of the milling machine which was found online was simply
+ the specification: XY movement of the cutting tool
+\end_layout
+
+\begin_layout Standard
+150x240mm
+\end_layout
+
+\begin_layout Standard
+Takes standard mini-mill cutters (2mm diameter)
+\end_layout
+
+\begin_layout Standard
+Maximum plunge is 3mm
+\end_layout
+
+\begin_layout Standard
+Cuts up to 5mm plastic in a single pass
+\end_layout
+
+\begin_layout Standard
+After starting with websites such as mindsetsonline.co.uk, tep.org.uk and various
+ forums, the few leads which came up were Middlesex University and Mindsets.
+ After numerous phone calls, it was discovered that since the machine was
+ made decades ago, it was now considered obsolete.
  As this was the case, there were not any user manuals or instructions for
  the machine except by post.
- Mindsets offered to send some documentation to us, but this would have
- taken a few weeks.
+ A user manual and some other documentation was offered to us by Mindsets,
+ but this would have taken a few weeks.
+ This meant that it was not possible for us to make use of it at the Cambridge
+ workshop.
+ Nevertheless, the user manual was sent to us at school, however, it did
+ not have the necessary information for the purpose for which we needed
+ it.
+\end_layout
+
+\begin_layout Standard
+Who are mindsets and TEP?
+\end_layout
+
+\begin_layout Standard
+Mindsets is a non-profit company owned by middlesex university.
+ They work with specialists in the field of science and DT to develop products
+ for fun learning and to get children inspired in science and technology.
+ 
+\end_layout
+
+\begin_layout Standard
+The Technology Enhancement Programme supports and improves learning and
+ teaching of technology in schools.
+ Its products are now sold through the Mindsets catalogue and on the Mindsets
+ website.
+ The TEP also produce many publications including ideas for projects and
+ textbooks.
 \end_layout
 
 \begin_layout Subsection
@@ -1177,8 +1224,537 @@ Solution
 Manual Control & RS232 PCBs - Abi - 1
 \end_layout
 
+\begin_layout Standard
+In order to communicate with the CNC milling machine and to get it to do
+ precisely what is required, an interface is needed in the form of a circuit
+ board with buttons controlling drilling and movement in the x and y-directions.
+ To make this, several processes are used.
+\end_layout
+
+\begin_layout Standard
+Manufacturing PCBs (printed circuit board) 
+\end_layout
+
+\begin_layout Standard
+The PCB artwork is designed on KiCad It is then printed onto a transparency
+ sheet using a laser jet printer (otherwise the ink won't stick).
+ 
+\end_layout
+
+\begin_layout Standard
+The photo etch PCB board is cut to size to fit the artwork on exactly.
+ 
+\end_layout
+
+\begin_layout Standard
+The artwork is attached face down onto a UV exposure light box*.
+ 
+\end_layout
+
+\begin_layout Standard
+After having removed the protective layer, the photo etch PCB board is placed
+ copper side down on top of the artwork.
+\end_layout
+
+\begin_layout Standard
+Once the board has been exposed to the UV light, it needs to be developed.
+ 
+\end_layout
+
+\begin_layout Standard
+A developing solution is made which is comprised of 1 part liquid photo-resist
+ developer concentrate and 9 parts water.
+ The board is left in the solution until the text written on the board just
+ becomes legible.
+ At this point, the board is taken out immediately and rinses under the
+ tap.
+ 
+\end_layout
+
+\begin_layout Standard
+To make the etching solution, 1 part fine etch crystals is mixed with 1
+ part water heated to 50 ºC.
+ 
+\end_layout
+
+\begin_layout Standard
+The developed board is placed into the preheated PCB processing tank for
+ about 15 minutes or until all the copper has been etched away.
+ 
+\end_layout
+
+\begin_layout Standard
+The board is removed from the tank and rinsed well.
+ 
+\end_layout
+
+\begin_layout Standard
+At this stage, it is time for the PCB to be drilled.
+ Once drilled, components of the circuit can now be soldered into place,
+ producing a completed circuit board.
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+*How the light box works 
+\end_layout
+
+\begin_layout Standard
+The photo etch PCB board consists of a layer of copper and a layer of etch
+ resist on top of a plastic board.
+ When they are placed in the light box and the light box is switched on,
+ wherever the board is exposed to the UV light, the etch resist layer is
+ destroyed.
+ The area which is covered by the dark lines in the artwork does not get
+ exposed, therefore that will be the area where the copper doesn't come
+ off when placed into the etching solution.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+A photo of one of our completed circuit boards
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsection
 Flowcharts & Event-based Programming - Abi - 3
+\end_layout
+
+\begin_layout Standard
+To understand how the commands sent to the milling machine are pieced together,
+ it was necessary to plan out the programs in the form of flowcharts before
+ turning them into C++ code (a general-purpose programming language).
+ 
+\end_layout
+
+\begin_layout Standard
+At first, it seemed like a very tricky concept to understand, since a single
+ command was made up of different stages and each stage was part of a different
+ flow chart.
+ For example, in order to clear an error, there has to be one flowchart
+ to check for an error and then depending on the outcome, the variable,
+ clear_error, is set to either 1 or 0, since it is a Boolean value (See
+ flowchart).
+ 
+\end_layout
+
+\begin_layout Standard
+This flowchart is carried on to also set another variable, manual drill.
+ Since it is decided by the user when to clear an error, it is only possible
+ for the program to store the fact that the clear error button (the ‘D’
+ button) has been pressed.
+ However, the error cannot actually be cleared by the first flowchart, it
+ can only be stored.
+ 
+\end_layout
+
+\begin_layout Standard
+To clear the error, a second flowchart, and therefore a separate part of
+ code is needed.
+ For other actions, like movement in the x- and y-directions and drilling,
+ the same principle is used.
+ 
+\end_layout
+
+\begin_layout Standard
+There is one flowchart for keeping track of the buttons that have been pressed,
+ then, there is another for implementing the commands that the user has
+ given through pressing certain buttons.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename /home/abi/Documents/Clear Error (flowchart) eee.eps
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename /home/abi/Documents/Manual control part 2 eeee.eps
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It is made easier to write the code if flowcharts are produced initially,
+ therefore the code in order to program the circuit board is written based
+ on the flowcharts.
+\end_layout
+
+\begin_layout Standard
+Code for Button Control:
+\end_layout
+
+\begin_layout Standard
+After having defined the buttons as followed:
+\end_layout
+
+\begin_layout LyX-Code
+#define FORWARD PC0
+\end_layout
+
+\begin_layout LyX-Code
+#define LEFT PC1
+\end_layout
+
+\begin_layout LyX-Code
+#define RIGHT PC2
+\end_layout
+
+\begin_layout LyX-Code
+#define DONE PC3
+\end_layout
+
+\begin_layout LyX-Code
+#define BACKWARD PC4
+\end_layout
+
+\begin_layout LyX-Code
+#define PORT_BUTTONS PORTC
+\end_layout
+
+\begin_layout LyX-Code
+#define PIN_BUTTONS PINC
+\end_layout
+
+\begin_layout LyX-Code
+#define DDR_BUTTONS DDRC
+\end_layout
+
+\begin_layout LyX-Code
+#define BUTTONS_MASK ( _BV ( LEFT ) | _BV ( RIGHT ) | _BV (DONE ) | _BV
+ ( FORWARD ) | _BV ( BACKWARD ) )
+\end_layout
+
+\begin_layout Standard
+And our variables:
+\end_layout
+
+\begin_layout LyX-Code
+int8_t manual_x;
+\end_layout
+
+\begin_layout LyX-Code
+int8_t manual_y;
+\end_layout
+
+\begin_layout LyX-Code
+uint8_t manual_drill;
+\end_layout
+
+\begin_layout Standard
+The code controlling the buttons can now be written.
+\end_layout
+
+\begin_layout LyX-Code
+/**
+\end_layout
+
+\begin_layout LyX-Code
+* Handle button presses
+\end_layout
+
+\begin_layout LyX-Code
+*
+\end_layout
+
+\begin_layout LyX-Code
+* @v buttons New button state
+\end_layout
+
+\begin_layout LyX-Code
+*/
+\end_layout
+
+\begin_layout LyX-Code
+static void buttons_pressed ( uint8_t buttons ) {
+\end_layout
+
+\begin_layout LyX-Code
+static uint8_t clear_error = 0;
+\end_layout
+
+\begin_layout LyX-Code
+uint8_t temp;
+\end_layout
+
+\begin_layout Standard
+Clearing errors is controlled by this part of the code: 
+\end_layout
+
+\begin_layout LyX-Code
+/* clear error */
+\end_layout
+
+\begin_layout LyX-Code
+if ( error ) {
+\end_layout
+
+\begin_layout LyX-Code
+if ( ! ( buttons & _BV ( DONE ) ) ) {
+\end_layout
+
+\begin_layout LyX-Code
+clear_error = 1;
+\end_layout
+
+\begin_layout LyX-Code
+} else {
+\end_layout
+
+\begin_layout LyX-Code
+if ( clear_error == 1 ) {
+\end_layout
+
+\begin_layout LyX-Code
+clear_error = 0;
+\end_layout
+
+\begin_layout LyX-Code
+error = 0;
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Standard
+The up and down movement of the drill is controlled by this part of the
+ code:
+\end_layout
+
+\begin_layout LyX-Code
+/* Set manual_drill=1 iff D button is pressed */
+\end_layout
+
+\begin_layout LyX-Code
+if ( ! ( buttons & _BV ( DONE ) ) ) {
+\end_layout
+
+\begin_layout LyX-Code
+manual_drill = 1;
+\end_layout
+
+\begin_layout LyX-Code
+} else {
+\end_layout
+
+\begin_layout LyX-Code
+manual_drill = 0;
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Standard
+The forward and backward movement of the drill is controlled by this part
+ of the code:
+\end_layout
+
+\begin_layout LyX-Code
+/* Set manual_y to +1, 0 or -1 based in F and B buttons */
+\end_layout
+
+\begin_layout LyX-Code
+temp = 0;
+\end_layout
+
+\begin_layout LyX-Code
+if ( ! ( buttons & _BV ( FORWARD ) ) ) {
+\end_layout
+
+\begin_layout LyX-Code
+temp += 1;
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+if ( ! ( buttons & _BV ( BACKWARD ) ) ) {
+\end_layout
+
+\begin_layout LyX-Code
+temp -= 1;
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+manual_y = temp;
+\end_layout
+
+\begin_layout Standard
+The left and right movement of the drill is controlled by this part of the
+ code:
+\end_layout
+
+\begin_layout LyX-Code
+/* Set manual_x to +1, 0 or -1 based in L and R buttons */ 
+\end_layout
+
+\begin_layout LyX-Code
+temp = 0;
+\end_layout
+
+\begin_layout LyX-Code
+if ( ! ( buttons & _BV ( LEFT ) ) ) {
+\end_layout
+
+\begin_layout LyX-Code
+temp -= 1;
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+if ( ! ( buttons & _BV ( RIGHT ) ) ) {
+\end_layout
+
+\begin_layout LyX-Code
+temp += 1;
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+manual_x = temp;
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+/**
+\end_layout
+
+\begin_layout LyX-Code
+* Pin change ISR
+\end_layout
+
+\begin_layout LyX-Code
+*
+\end_layout
+
+\begin_layout LyX-Code
+*/
+\end_layout
+
+\begin_layout LyX-Code
+ISR ( PCINT1_vect ) {
+\end_layout
+
+\begin_layout LyX-Code
+uint8_t buttons;
+\end_layout
+
+\begin_layout LyX-Code
+/* Read button state */
+\end_layout
+
+\begin_layout LyX-Code
+buttons = PIN_BUTTONS;
+\end_layout
+
+\begin_layout LyX-Code
+/* Handle change of button state */
+\end_layout
+
+\begin_layout LyX-Code
+buttons_pressed ( buttons );
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+/**
+\end_layout
+
+\begin_layout LyX-Code
+* Initialise buttons
+\end_layout
+
+\begin_layout LyX-Code
+*
+\end_layout
+
+\begin_layout LyX-Code
+*/
+\end_layout
+
+\begin_layout LyX-Code
+void buttons_init ( void ) {
+\end_layout
+
+\begin_layout LyX-Code
+/* Configure buttons with internal pull-up resistors */
+\end_layout
+
+\begin_layout LyX-Code
+PORT_BUTTONS |= BUTTONS_MASK;
+\end_layout
+
+\begin_layout LyX-Code
+/* Configure buttons to trigger pin change interrupt */
+\end_layout
+
+\begin_layout LyX-Code
+PCMSK1 = BUTTONS_MASK;
+\end_layout
+
+\begin_layout LyX-Code
+PCICR = _BV ( PCIE1 );
+\end_layout
+
+\begin_layout LyX-Code
+}
 \end_layout
 
 \begin_layout Subsection
@@ -3060,6 +3636,49 @@ serial.c
 
 \begin_layout Subsection
 Buttons - Abi - 3
+\end_layout
+
+\begin_layout Standard
+t was decided that a type of user interface was needed in the form of a
+ set of buttons for manually controlling forward, backward, left and right
+ movement of the drill.
+ 
+\end_layout
+
+\begin_layout Standard
+Firstly, a few conditions need to be checked.
+ There must be no information being sent to the RS232 receiver, there must
+ be no CNC activity, i.e.
+ there should be no movement of the drill, and there must not be any errors
+ waiting to be cleared.
+ With all these conditions true, the yellow LED would be off and only then
+ is it possible to assume manual control.
+\end_layout
+
+\begin_layout Standard
+The button layout used on the interface is shown in figure z.
+ Five buttons are used and laid out in a logical fashion:
+\end_layout
+
+\begin_layout Standard
+‘R’ (right) – used for movement in the positive x-direction
+\end_layout
+
+\begin_layout Standard
+‘L’ (left) – used for movement in the negative x-direction
+\end_layout
+
+\begin_layout Standard
+‘F’ (forward) – used for movement in the positive y-direction
+\end_layout
+
+\begin_layout Standard
+‘B’ (back) – used for movement in the negative y-direction
+\end_layout
+
+\begin_layout Standard
+‘D’ (drill) – used to control the up and down movement of the drill and
+ also used to clear errors
 \end_layout
 
 \begin_layout Section
