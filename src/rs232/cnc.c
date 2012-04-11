@@ -142,9 +142,9 @@ static void cnc_update ( void ) {
 		x_target = ( manual_x + x_target );
 		y_target = ( manual_y + y_target );
 		if ( manual_drill ) {
-			PORT_SOLENOID |= _BV ( SOLENOID );
-		} else {
 			PORT_SOLENOID &= ~_BV ( SOLENOID );
+		} else {
+			PORT_SOLENOID |= _BV ( SOLENOID );
 		}
 		return;
 	}
