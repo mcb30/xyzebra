@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date Fri 03 Feb 2012 01:50:09 GMT
+EESchema Schematic File Version 2  date Tue 13 Mar 2012 16:12:22 GMT
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -37,7 +37,7 @@ $Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
 Title ""
-Date "3 feb 2012"
+Date "13 mar 2012"
 Rev ""
 Comp ""
 Comment1 ""
@@ -45,16 +45,18 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
+NoConn ~ 3450 6350
+NoConn ~ 1500 7050
 Wire Wire Line
-	3450 6250 2600 6250
+	3450 6450 2350 6450
 Wire Wire Line
-	2600 6250 2600 6650
+	2150 6250 2150 6950
 Wire Wire Line
-	2600 6650 2150 6650
+	1500 6750 2350 6750
 Wire Wire Line
-	2250 7050 2150 7050
+	2350 6750 2350 6450
 Wire Wire Line
-	1500 6950 2250 6950
+	2150 6250 3450 6250
 Wire Wire Line
 	5650 6250 5650 3800
 Wire Wire Line
@@ -85,12 +87,6 @@ Wire Wire Line
 	1950 6550 1950 7150
 Wire Wire Line
 	1950 6550 1500 6550
-Wire Wire Line
-	1500 7050 1850 7050
-Wire Wire Line
-	1850 7050 1850 6850
-Wire Wire Line
-	1850 6850 1500 6850
 Connection ~ 2750 5250
 Connection ~ 2500 5250
 Wire Wire Line
@@ -112,7 +108,7 @@ Wire Wire Line
 Wire Wire Line
 	5050 5450 5250 5450
 Wire Wire Line
-	2800 3700 5750 3700
+	2800 3700 5850 3700
 Wire Wire Line
 	5100 1100 5100 1200
 Wire Wire Line
@@ -162,7 +158,7 @@ Wire Wire Line
 	7000 4300 2800 4300
 Connection ~ 7400 4500
 Wire Wire Line
-	7400 4250 7400 4800
+	7400 4800 7400 4250
 Wire Wire Line
 	9300 3650 9100 3650
 Wire Wire Line
@@ -170,9 +166,9 @@ Wire Wire Line
 Wire Wire Line
 	9600 650  9600 850 
 Wire Wire Line
-	9900 1750 9300 1750
+	9300 1750 9900 1750
 Wire Wire Line
-	9600 1450 9600 2050
+	9600 2050 9600 1450
 Wire Wire Line
 	7800 4700 7700 4700
 Wire Wire Line
@@ -183,7 +179,7 @@ Wire Wire Line
 	7300 4500 7300 4600
 Connection ~ 8500 4350
 Wire Wire Line
-	9100 4650 9100 5250
+	9100 5250 9100 4650
 Wire Wire Line
 	8500 4950 8500 5150
 Wire Wire Line
@@ -226,7 +222,7 @@ Wire Wire Line
 	7300 4700 7400 4700
 Connection ~ 7400 4700
 Wire Wire Line
-	8700 4350 7800 4350
+	7800 4350 8700 4350
 Connection ~ 7800 4700
 Connection ~ 9600 1750
 Wire Wire Line
@@ -241,7 +237,7 @@ Wire Wire Line
 Wire Wire Line
 	10100 3650 10100 3800
 Wire Wire Line
-	7800 4250 7800 4800
+	7800 4800 7800 4250
 Connection ~ 7800 4350
 Wire Wire Line
 	2800 4400 7100 4400
@@ -281,7 +277,7 @@ Wire Wire Line
 Wire Wire Line
 	3750 2500 3750 1600
 Wire Wire Line
-	4350 1400 3300 1400
+	3300 1400 4350 1400
 Wire Wire Line
 	3750 1600 4350 1600
 Wire Wire Line
@@ -303,9 +299,9 @@ Wire Wire Line
 Wire Wire Line
 	2750 5050 3450 5050
 Wire Wire Line
-	2500 5950 2500 5700
+	2500 5700 2500 5950
 Wire Wire Line
-	2500 5300 2500 5100
+	2500 5100 2500 5300
 Wire Wire Line
 	1500 6650 1950 6650
 Wire Wire Line
@@ -334,41 +330,30 @@ Wire Wire Line
 Wire Wire Line
 	6550 1650 6650 1650
 Wire Wire Line
-	5050 6450 5750 6450
+	5050 6450 5850 6450
 Wire Wire Line
-	5750 6450 5750 3700
+	5850 6450 5850 3700
 Wire Wire Line
-	1500 6750 3250 6750
+	2150 6950 1500 6950
 Wire Wire Line
-	3250 6750 3250 7050
+	2250 6150 2250 6850
 Wire Wire Line
-	3250 7050 3050 7050
+	2250 6150 3450 6150
 Wire Wire Line
-	3450 6450 2700 6450
+	2250 6850 1500 6850
 Wire Wire Line
-	2700 6450 2700 6650
+	3950 1600 3950 4700
+Connection ~ 3950 1600
 Wire Wire Line
-	2700 6650 3150 6650
+	3950 4700 5550 4700
 Wire Wire Line
-	3150 6650 3150 6950
+	5550 4700 5550 6150
 Wire Wire Line
-	3150 6950 3050 6950
-Wire Wire Line
-	2150 7050 2150 6650
+	5550 6150 5050 6150
 Text Label 2850 6450 0    60   ~ 0
 RXD_RS232
 Text Label 2850 6250 0    60   ~ 0
 TXD_RS232
-$Comp
-L CONN_2X2 J1
-U 1 1 4F2B333E
-P 2650 7000
-F 0 "J1" H 2650 7150 50  0000 C CNN
-F 1 "DCE/DTE" H 2660 6870 40  0000 C CNN
-F 2 "PIN_ARRAY_2X2" H 2660 6970 40  0001 C CNN
-	1    2650 7000
-	-1   0    0    1   
-$EndComp
 Text Label 2950 3450 0    60   ~ 0
 GREEN
 Text Label 2950 2300 0    60   ~ 0
@@ -554,9 +539,6 @@ F 2 "C2" H 5300 5250 50  0001 C CNN
 	1    5250 5250
 	1    0    0    -1  
 $EndComp
-NoConn ~ 3450 6350
-NoConn ~ 3450 6150
-NoConn ~ 5050 6150
 NoConn ~ 5050 6350
 $Comp
 L MAX232 U3

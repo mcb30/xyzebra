@@ -3,6 +3,7 @@
 
 extern uint8_t manual_x;
 extern uint8_t manual_y;
+extern uint8_t manual_drill;
 
 extern void buttons_init ( void );
 

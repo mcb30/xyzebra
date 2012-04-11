@@ -9,6 +9,7 @@
 #include <avr/interrupt.h>
 #include "leds.h"
 #include "targets.h"
+#include "buttons.h"
 #include "cnc.h"
 
 /* Solenoid is attached to PB0 */
@@ -107,6 +108,7 @@ static void cnc_update ( void ) {
 	static uint16_t x_target;
 	static uint16_t y_target;
 
+
 	/* Update stepper motor outputs */
 	x_pos = x_pos + sign (x_target - x_pos);
 	y_pos = y_pos + sign (y_target - y_pos);
@@ -136,7 +138,14 @@ static void cnc_update ( void ) {
 
 	/* Does the produced equal the consumer? */
 	if ( target_prod == target_cons ){
-	        cnc_activity = 0; 
+	        cnc_activity = 0;
+		x_target = ( manual_x + x_target );
+		y_target = ( manual_y + y_target );
+		if ( manual_drill ) {
+			PORT_SOLENOID |= _BV ( SOLENOID );
+		} else {
+			PORT_SOLENOID &= ~_BV ( SOLENOID );
+		}
 		return;
 	}
 
