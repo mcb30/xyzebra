@@ -90,7 +90,7 @@ int main ( void ) {
 		goto err_open_device;
 
 #if 0
-	if ( ( lusbrc = move_to_target ( &device, 20000, 20000, 0, 0 ) ) < 0 )
+	if ( ( lusbrc = move_to_target ( &device, 25000, 25000, 0, 0 ) ) < 0 )
 		goto err_move_to_target;
 
 	if ( ( lusbrc = move_to_target ( &device, 0, 0, 6000, 0 ) ) < 0 )
