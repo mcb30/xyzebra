@@ -12,6 +12,9 @@ all : simple tepctrl.bin
 dlpusb245_control : dlpusb245_control.o dlpusb245.o
 	$(CC) -o $@ $^ $(LIBUSB_LDFLAGS)
 
+dlpusb245_motor : dlpusb245_motor.o dlpusb245.o
+	$(CC) -o $@ $^ $(LIBUSB_LDFLAGS)
+
 %.o : %.c
 	$(CC) $(CFLAGS) $(LIBUSB_CFLAGS) -o $@ -c $<
 
