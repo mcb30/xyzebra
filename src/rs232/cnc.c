@@ -107,7 +107,13 @@ static void cnc_update ( void ) {
 	uint8_t stepper_d;
 	static uint16_t x_target;
 	static uint16_t y_target;
-
+	
+	/* Check to see if there's an error */
+	if ( error == 1 ) {
+		PORT_SOLENOID |= _BV ( SOLENOID );
+		return;
+	}
+		
 
 	/* Update stepper motor outputs */
 	x_pos = x_pos + sign (x_target - x_pos);
@@ -119,7 +125,7 @@ static void cnc_update ( void ) {
 
 	/* Is position at target? */
 	if  ( ( x_pos != x_target ) || ( y_pos != y_target ) ) {
-		/* Solenoid up */
+		/* Solenoid down */
 		PORT_SOLENOID |= _BV ( SOLENOID );
 		return;
 	}
@@ -128,7 +134,7 @@ static void cnc_update ( void ) {
 	if ( drill_counter != 0 ) {
 		drill_counter--;
 
-		/* Solenoid down */
+		/* Solenoid up */
 		PORT_SOLENOID &= ~_BV ( SOLENOID );
 		
 		return;
