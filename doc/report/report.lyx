@@ -96,7 +96,11 @@ LatexCommand tableofcontents
 \end_layout
 
 \begin_layout Section
-Problem
+Abstract - Charlie - 1
+\end_layout
+
+\begin_layout Section
+Problem - Mel - 1
 \end_layout
 
 \begin_layout Standard
@@ -105,6 +109,10 @@ Problem
 
 \begin_layout Section
 Research
+\end_layout
+
+\begin_layout Subsection
+Original Equipment Manufacture - Abi - 1 
 \end_layout
 
 \begin_layout Standard
@@ -123,6 +131,10 @@ At Cambridge, the team realised that in order to get any sensible use out
  taken a few weeks.
 \end_layout
 
+\begin_layout Subsection
+Reverse Engineering the Circuit Board - Pippa - 4
+\end_layout
+
 \begin_layout Standard
 
 \series bold
@@ -130,7 +142,7 @@ Did we still ask them to send documents to school? What did we do instead?
 \end_layout
 
 \begin_layout Subsection
-Opening up the CNC Drill
+Opening up the CNC Drill 
 \end_layout
 
 \begin_layout Standard
@@ -249,6 +261,10 @@ name "fig:stepper-motor"
 
 \end_layout
 
+\begin_layout Subsection
+Manual Control - Switches - Mel - 3
+\end_layout
+
 \begin_layout Standard
 By using a stepper motor ordered from 
 \begin_inset Flex URL
@@ -263,12 +279,8 @@ www.rapidonline.com
 
 , we were able to experiment finding the correct wiring sequence without
  the threat of harming the motor inside of the drill.
- We connected each of the inputs 
-\series bold
-[should I go more into how we found the inputs??]
-\series default
- to a series of switches in a spare prototype board which allowed us to
- turn on each of the 
+ We connected each of the inputs to a series of switches in a spare prototype
+ board which allowed us to turn on each of the 
 \begin_inset Quotes eld
 \end_inset
 
@@ -294,6 +306,10 @@ Rotate right - 1100 0110 0011 1001
 
 \begin_layout Itemize
 Rotate left - 0011 0110 1100 1001
+\end_layout
+
+\begin_layout Subsection
+Using the 4017 Decade Counter - Mel - 2
 \end_layout
 
 \begin_layout Standard
@@ -376,6 +392,10 @@ name "fig:stepper-4017"
 
 \end_layout
 
+\begin_layout Subsection
+Using a Laptop - Mel - 2
+\end_layout
+
 \begin_layout Standard
 The rotation speed of the motor depended on the value of the capacitor in
  the astable, wanting to experiment further we increased the values of the
@@ -384,10 +404,7 @@ The rotation speed of the motor depended on the value of the capacitor in
  It was here that we found the limits of the motor.
  After confirmation that this method worked, we proceeded onto using this
  with laptops.
- We devised a simple program to scroll the outputs 
-\series bold
-[should I just say what the program did, or actually show step by step what
- the program did?]
+ We devised a simple program to scroll the outputs.
 \end_layout
 
 \begin_layout Section
@@ -395,7 +412,19 @@ Solution
 \end_layout
 
 \begin_layout Subsection
-Interpreting Excellon Drill Files
+Manual Control & RS232 PCBs - Abi - 1
+\end_layout
+
+\begin_layout Subsection
+Flowcharts & Event-based Programming - Abi - 3
+\end_layout
+
+\begin_layout Subsection
+CNC Control - Mel - 5/6
+\end_layout
+
+\begin_layout Subsection
+Interpreting Excellon Drill Files - Charlie - Up to 8
 \end_layout
 
 \begin_layout Standard
@@ -890,6 +919,42 @@ Explanation of our final program
 
 \begin_layout Standard
 ...
+\end_layout
+
+\begin_layout Subsection
+Buttons - Abi - 3
+\end_layout
+
+\begin_layout Section
+Evaluation and Summary - Abi -1
+\end_layout
+
+\begin_layout Section
+Future Work
+\end_layout
+
+\begin_layout Subsection
+Callibrations and Matrices - Pippa - 4
+\end_layout
+
+\begin_layout Section
+Acknowledgements - Pippa - 1
+\end_layout
+
+\begin_layout Section
+Appendices
+\end_layout
+
+\begin_layout Subsection
+Code Listings
+\end_layout
+
+\begin_layout Subsection
+Schematics
+\end_layout
+
+\begin_layout Subsection
+PCB Layouts
 \end_layout
 
 \end_body
