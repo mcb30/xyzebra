@@ -9,7 +9,7 @@ AVR_CFLAGS = $(CFLAGS) -Os -mmcu=atmega168
 
 all : simple tepctrl.bin
 
-simple : simple.o dlpusb245.o
+dlpusb245_control : dlpusb245_control.o dlpusb245.o
 	$(CC) -o $@ $^ $(LIBUSB_LDFLAGS)
 
 %.o : %.c
