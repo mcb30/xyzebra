@@ -137,7 +137,7 @@ static void cnc_update ( void ) {
 	PORT_SOLENOID |= _BV ( SOLENOID );
 
 	/* Does the produced equal the consumer? */
-	if ( target_prod == target_cons ){
+	if ( targets_empty() ){
 	        cnc_activity = 0;
 		x_target = ( manual_x + x_target );
 		y_target = ( manual_y + y_target );
@@ -150,8 +150,8 @@ static void cnc_update ( void ) {
 	}
 
 	cnc_activity = 1;
-	x_target = targets[target_cons].x;
-	y_target = targets[target_cons].y;
+	x_target = targets[ target_cons % NUM_TARGETS ].x;
+	y_target = targets[ target_cons % NUM_TARGETS ].y;
 	target_cons = target_cons +1;
 	drill_counter = 500;
 	return;
