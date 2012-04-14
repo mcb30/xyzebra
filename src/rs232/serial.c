@@ -157,7 +157,7 @@ static void handle_t ( char data ) {
 		T_value *= 10;
 		T_value += value;
 		
-		/* If T_value is too large seet error */
+		/* If T_value is too large set error */
 		if ( T_value > MAX_DRILL_BITS ) {
 			printf( "\nError: State T, T_value is too large" );
 			error = 1;
