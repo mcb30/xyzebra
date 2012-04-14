@@ -407,6 +407,355 @@ The rotation speed of the motor depended on the value of the capacitor in
  We devised a simple program to scroll the outputs.
 \end_layout
 
+\begin_layout Subsection
+Proof of Concept - Charlie - 2
+\end_layout
+
+\begin_layout Standard
+Once a program able to drive an independant stepper motor had been created,
+ the next task was to connect it to the stepper motors within the Mini Mill.
+ Having already reverse-engineered the circuitry within the machine itself,
+ it was possible to identify the four inputs to each of the stepper motors
+ and connect them to a breadboard via the rs232 cable.
+ The dlpusb245 was then connected to the same breadboard, allowing the motors
+ to be controlled from a laptop.
+ The existing program was then able to drive the drill in the X and Y directions
+ both forward and backwards.
+\end_layout
+
+\begin_layout Standard
+A separate program then needed to be created in order to move the drill
+ to a specific co-ordinate.
+ For the previous program a sequence of 1000 steps moved the drill 1cm.
+ As the movement distance in the X direction is 28cm and the movement distance
+ in the Y direction is 18cm, the maximum drill co-ordinates, in terms of
+ steps, is ( 28000, 18000 ).
+ The drill has no way of sending its current set of co-ordinates to the
+ laptop, so a system of callibrating the drill was needed.
+ The only drill locations where the spatial co-ordinates can be accurately
+ predicted are the four corners, so when we created our new program we made
+ sure that as soon as it begins the drill is set to run into the top-right
+ hand corner.
+ To do this the motors are initially given the instruction to move 30,000
+ steps in the X axis and 20,000 steps in the Y axis.
+ This runs the drill into the bottom corner regardless of its initial position,
+ as it is attempting to move the total distance of the whole movement plane.
+\end_layout
+
+\begin_layout LyX-Code
+/* The function move-to-targets is called with the co-ordinates 30,000 and
+ 20,000
+\end_layout
+
+\begin_layout LyX-Code
+being sent.
+ This runs the drill into the top-right hand corner */
+\end_layout
+
+\begin_layout LyX-Code
+lusbrc = move_to_target ( &device, 30000, 20000, 0, 0 )
+\end_layout
+
+\begin_layout Standard
+When x and y co-ordinates are sent to our program they are stored in two
+ variables named 
+\begin_inset Quotes eld
+\end_inset
+
+target_x
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+target_y
+\begin_inset Quotes erd
+\end_inset
+
+.
+ As these inputed co-ordinates are in centimeters, they are multiplied by
+ 1000 before being stored as this will give the distance in terms of the
+ number of steps.
+\end_layout
+
+\begin_layout LyX-Code
+/* Define the used variables */
+\end_layout
+
+\begin_layout LyX-Code
+unsigned int a_target_x;
+\end_layout
+
+\begin_layout LyX-Code
+unsigned int a_target_y;
+\end_layout
+
+\begin_layout LyX-Code
+unsigned int target_x;
+\end_layout
+
+\begin_layout LyX-Code
+unsigned int target_y;
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+/* This loop takes the inputted co-ordinates, multiplies by 1000 and stores
+ them */
+\end_layout
+
+\begin_layout LyX-Code
+while ( 1 )
+\end_layout
+
+\begin_layout LyX-Code
+{
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+scanf ( "%d,%d", &a_target_x, &a_target_y );
+\end_layout
+
+\begin_layout LyX-Code
+target_x = a_target_x*1000
+\end_layout
+
+\begin_layout LyX-Code
+target_y = a_target_y*1000;
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Standard
+The program also holds two other variables named simply 'x' and 'y'.
+ These variables are supposed to represent the current position of the drill
+ and so they begin at ( 0, 0 ).
+ When 
+\begin_inset Quotes eld
+\end_inset
+
+target_x
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+target_y
+\begin_inset Quotes erd
+\end_inset
+
+ recieve values, the program checks to see if 'x' and 'y' are less than,
+ equal to or greater than them.
+ If they are less (as they will be initially) then the stepper motors are
+ instructed to drive through their sequence forwards.
+ Every time the x or y motor advances a step, the corresponding 'x' or 'y'
+ variable is incremented until it equals its target value.
+ When both 'x' and 'y' equal their target values the drill will be in the
+ correct position and the program is ready to recieve a new co-ordinate.
+ If this co-ordinate is then less than 'x' and 'y', the stepper sequence
+ will run backwards and the position variables will decrement every step.
+ 
+\end_layout
+
+\begin_layout LyX-Code
+/* Define the new variables */
+\end_layout
+
+\begin_layout LyX-Code
+unsigned int x;
+\end_layout
+
+\begin_layout LyX-Code
+unsigned int y;
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+/* This loop operates while the position co-ordinated do not equal the destinati
+on
+\end_layout
+
+\begin_layout LyX-Code
+co-ordinates */
+\end_layout
+
+\begin_layout LyX-Code
+while ( ( x != target_x ) || ( y != target_y ) )
+\end_layout
+
+\begin_layout LyX-Code
+{ 
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+/* full_step_x and full_step_y are external functions defined elswhere.
+ This line
+\end_layout
+
+\begin_layout LyX-Code
+increases the stepper motor sequence by one stage for every increase in
+ x or y */
+\end_layout
+
+\begin_layout LyX-Code
+bits = ( full_step_y.bits [ y % 4 ] | full_step_x.bits [ x % 4 ] );
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+/* Sends the current stage in the stepper sequence to dlpusb245 */
+\end_layout
+
+\begin_layout LyX-Code
+if ( ( lusbrc = set_output_value ( device, bits ) ) < 0 ) return lusbrc;
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+/* The program pauses for one millisecond as the motors have a maximum sequence
+\end_layout
+
+\begin_layout LyX-Code
+cycle speed */
+\end_layout
+
+\begin_layout LyX-Code
+usleep ( 1000 ); 
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+/* The program increases x and y if they are smaller than their targets,
+ and
+\end_layout
+
+\begin_layout LyX-Code
+decreases them if they are larger */
+\end_layout
+
+\begin_layout LyX-Code
+if ( x < target_x ) { x++; }
+\end_layout
+
+\begin_layout LyX-Code
+else if ( x > target_x ) { x--; } 
+\end_layout
+
+\begin_layout LyX-Code
+if ( y < target_y ) { y++; }
+\end_layout
+
+\begin_layout LyX-Code
+else if ( y > target_y ) { y--; }
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Standard
+A set of co-ordinates was then created to outline a simple image.
+ A panda outline was chosen as our test design.
+ This shape could not be milled as the program had no control over the drill
+ up/down function and the correct milling cutters were not avaliable at
+ the time.
+ Instead a pencil was taped to the side of the drill and a sheet of paper
+ was placed on the drilling surface so that movement would result in an
+ image being drawn.
+ The individual co-ordinates were then sent to our program and the machine
+ drew the required shape.
+ The resulting image was faint and slightly wobbly, but the outline of the
+ Panda that our co-ordinates specified was still clearly visible, as seen
+ in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Panda_image"
+
+\end_inset
+
+.
+ This successful demonstration marked the end the Cambridge Workshop for
+ the team.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Panda.jpg
+	width 13cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+The Panda image drawn by the Mini Mill
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Panda_image"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+See the appendix for the code in full.
+ The program is named 
+\begin_inset Quotes eld
+\end_inset
+
+dlpusb245_control.c
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
 \begin_layout Section
 Solution
 \end_layout
@@ -449,7 +798,7 @@ reference "fig:excellon-sample"
 
 \end_inset
 
- shows a typical example of an Excellon drill file:
+ shows a typical example of an Excellon drill file.
 \end_layout
 
 \begin_layout Standard
@@ -802,19 +1151,59 @@ End program
 \end_layout
 
 \begin_layout Subsubsection
-Our Solution
+A Simplified Solution
 \end_layout
 
 \begin_layout Standard
-How the program works
+See figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Interpreter-flowchart"
+
+\end_inset
+
+ for a flowchart of a simpler version of this program.
 \end_layout
 
 \begin_layout Standard
-Here is a flowchart for a simpler version of this program:
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Drill File Interpreter Flowchart.jpg
+	width 18cm
+	rotateAngle 270
+
+\end_inset
+
+
 \end_layout
 
-\begin_layout Standard
-Understanding the simplified program
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+A flowchart demonstrating a simple version of the Excellon interpreter
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Interpreter-flowchart"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -827,24 +1216,23 @@ This simplified version is only designed to handle lines of co-ordinates.
 \end_layout
 
 \begin_layout Standard
-The program is begins when it receives an interrupt.
- This interrupt is triggered when a character is sent.
- “rs232-activity” is handled by a separate program.
- When it is > 0 we want to show that there is data being sent along the
- rs232 cable.
- Therefore we set it high every time this program is triggered..
+The program begins when it receives an interrupt which is triggered when
+ a character is sent.
+ The “rs232-activity” variable is handled by a separate program.
+ It indicates that there is data being sent along the rs232 cable and so
+ it is initially set high.
 \end_layout
 
 \begin_layout Standard
-The program first looks to see if the sent character is a number.
- If it is not, then we check if it is an 'X', a 'Y' or a '
+The program next looks to see if the sent character is a number.
+ If not, it checks if it is an 'X', a 'Y' or a '
 \backslash
 n'.
 \end_layout
 
 \begin_layout Standard
-If it is an 'X' or a 'Y' the variable “state” is changed to the corresponding
- letter.
+If the character is an 'X' or a 'Y' the variable “state” is changed to the
+ corresponding letter.
 \end_layout
 
 \begin_layout Standard
@@ -854,71 +1242,795 @@ n' then the current set of co-ordinates stored in “X_target” and “Y_target
  are handled by a sub-process which passes them on to a separate program.
  “state” is then set to empty or “-”, and “X_target” and “Y_target” are
  reset.
- We do this as “
+ This is done as “
 \backslash
-n” indicates that the current set of co-ordinates has been past and the
- next set is about to be sent.
+n” indicates that the current set of co-ordinates has been sent and the
+ next set is about to be recieved.
 \end_layout
 
 \begin_layout Standard
-If a letter is passed which is not one of the above we assume there has
- been a malfunction somewhere, so we set “error” to 1 and reset “state”,
- “X_target” and “Y_target”.
+If a letter is passed which is not one of the above the program assumes
+ there has been a malfunction somewhere, so “error” is set to 1 and “state”,
+ “X_target” and “Y_target” are all reset.
 \end_layout
 
 \begin_layout Standard
-If a number has been sent then the program first checks the value of “state”.
+If a number has been sent then the program checks the value of “state”.
  If the state is 'X' or 'Y' then the number will be stored in “X_target”
  or “Y_target” respectively.
- However, if “state” is '-' , something has gone wrong, so we do not store
- the number, we set “error” to 1 and we reset “state”, “X_target” and “Y_target”.
+ However, if “state” is '-' , something has gone wrong, so the number is
+ not stored, “error” is set to 1 and “state”, “X_target” and “Y_target”
+ are all again reset.
 \end_layout
 
 \begin_layout Standard
-When a number is stored in “X_target” or “Y_target” we do not want to overwrite
- the current value, as the co-ordinates are being sent one digit at a time
- and each co-ordinate has multiple digits.
- We wish to add each subsequent digit on to the end of the current value,
- so the + operator will not work either.
+When a number is stored in “X_target” or “Y_target” it would be incorrect
+ to overwrite the current value, as the co-ordinates are being sent one
+ digit at a time and each co-ordinate has multiple digits.
+ The program should add each subsequent digit on to the end of the current
+ value, so the + operator will not work either.
 \end_layout
 
 \begin_layout Standard
-To demonstrate this, consider the number 42 being sent to our program.
+To demonstrate this, consider the number 42 being sent to the program.
 \end_layout
 
 \begin_layout Standard
-Initially we store the first number, 4, in the relevant target variable.
+Initially the first number, 4, is stored in the relevant target variable.
 \end_layout
 
 \begin_layout Standard
-If we simply store the following 2 in the variable it will equal 2, rather
+If the following 2 is simply stored in the variable it will equal 2, rather
  that 42.
 \end_layout
 
 \begin_layout Standard
-If we + the 2 to the variable it will equal 6, which is also incorrect.
+If the variable is + the 2 it will equal 6, which is also incorrect.
 \end_layout
 
 \begin_layout Standard
 The solution is to multiply the target variable by 10 and then add the next
  character.
- This way when the 2 is sent our 4 is changed to 40.
- The 2 is then added, giving us 42 as required.
+ This way when the 2 is sent the 4 is changed to 40.
+ The 2 is then added, giving 42 as required.
 \end_layout
 
 \begin_layout Standard
 However, this simple program does not take into account the specifics of
  the Excellon format.
- Here is an explanation of our final solution which takes these nuances
- into account:
+ A programmable solution was needed which took these nuances into account.
+\end_layout
+
+\begin_layout Subsubsection
+The Final Solution
 \end_layout
 
 \begin_layout Standard
-Explanation of our final program
+This final program was named 
+\begin_inset Quotes eld
+\end_inset
+
+serial.c
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Much like the simplified model, serial.c begins by setting rs232_activity_count
+ to 5.
+ It then checks the first letter of the line to see what kind of information
+ is about to be sent.
+ A 
+\begin_inset Quotes eld
+\end_inset
+
+state
+\begin_inset Quotes erd
+\end_inset
+
+ is then set corresponding to the letter and the rest of the line is processed
+ accordingly.
+ This is done by checking if the sent character is a letter whenever the
+ state = STATE_NONE.
+ It then sets state to the recieved letter.
+ Whenever a new line character (
+\backslash
+n) is recieved state is reset to STATE_NONE, and so the first letter of
+ each line ultimately determines the way it is interpreted.
+\end_layout
+
+\begin_layout LyX-Code
+/* A character is sent */
+\end_layout
+
+\begin_layout LyX-Code
+static void receive ( char data ) {
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+/* Set the RS232 activity counter */
+\end_layout
+
+\begin_layout LyX-Code
+rs232_activity_count = 5;
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+/* If there is an error end process */ 	
+\end_layout
+
+\begin_layout LyX-Code
+if ( error != 0 ) 		
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+return;
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+/* Check to see if a state has been set */
+\end_layout
+
+\begin_layout LyX-Code
+else if ( state == STATE_NONE ) { 	
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+/* If data is an G, set state to G */ 
+\end_layout
+
+\begin_layout LyX-Code
+if ( data == 'G' ) { 
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+state = STATE_G; 	
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+} 	
+\end_layout
+
+\begin_layout LyX-Code
+/* If data is an M, set state to M */ 
+\end_layout
+
+\begin_layout LyX-Code
+else if ( data == 'M' ) { 
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+state = STATE_M; 	
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+/* If data is an T, set state to T */
+\end_layout
+
+\begin_layout LyX-Code
+else if ( data == 'T' ) { 		
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+state = STATE_T; 	
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+} 	
+\end_layout
+
+\begin_layout LyX-Code
+/* If data is an X, set state to X */ 
+\end_layout
+
+\begin_layout LyX-Code
+else if ( data == 'X' ) { 		
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+state = STATE_X; 	
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+/* If data is an Y, set state to Y */ 
+\end_layout
+
+\begin_layout LyX-Code
+else if ( data == 'Y' ) { 			
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+state = STATE_Y; 		
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+} else {
+\end_layout
+
+\begin_layout LyX-Code
+/* Otherwise the line may be ignored */		
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+state = STATE_IGNORE; 	
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+}
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+}
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+}
 \end_layout
 
 \begin_layout Standard
+When the program recieves a character and a state is set, the character
+ is sent to one of several separate functions.
+\end_layout
+
+\begin_layout LyX-Code
 ...
+\end_layout
+
+\begin_layout LyX-Code
+/* If the state is T, process data */
+\end_layout
+
+\begin_layout LyX-Code
+else if ( state == STATE_T ) {
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+handle_t ( data );
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+} 
+\end_layout
+
+\begin_layout LyX-Code
+/* If the state is X or Y, process data */
+\end_layout
+
+\begin_layout LyX-Code
+else if ( ( state == STATE_X ) || ( state == STATE_Y ) ) {
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+handle_x_and_y ( data );
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+/* If data is a new line reset */
+\end_layout
+
+\begin_layout LyX-Code
+else if ( data == '
+\backslash
+r' ) {
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+reset();
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Standard
+The way these functions process characters varies slightly.
+ For example, in STATE_T a typical line might look like
+\end_layout
+
+\begin_layout LyX-Code
+T2C0.045
+\end_layout
+
+\begin_layout Standard
+The function handle_t() is called for this line.
+ The 'T' has already been dealt with, so the first character sent to the
+ function is the two.
+ The program's first check differentiates between characters and numbers.
+ All numbers are initially converted from ASCII characters to number values
+ so that they can be usefully handled.
+ These numbers are then stored in a variable named 
+\begin_inset Quotes eld
+\end_inset
+
+T_value
+\begin_inset Quotes erd
+\end_inset
+
+ using the * 10, + value principle explained in the simplified solution.
+ As T_value is supposed to store the number of the specified drillbit the
+ program will set an error if it gets too large.
+ For testing purposes the program has also been designed to print the inputted
+ value of T_value when it is set, as well as a specific error message when
+ an error is set.
+ The numbers after the letter 'C' in the example line specify the diameter
+ of drillbit 2.
+ When the program recieves this letter it treats it as a letter rather than
+ a number and instead sets the state to STATE_C.
+ This way when the following numbers are inputted they will be handled by
+ a separate function called handle_c() which assigns the current value of
+ T_value a specific drillbit dimension .
+ If a letter other than 'C' is sent to the function, there has clearly been
+ an mistake somewhere so an error is set and an error message is printed.
+\end_layout
+
+\begin_layout LyX-Code
+/* Handles data in state T */
+\end_layout
+
+\begin_layout LyX-Code
+static void handle_t ( char data ) {
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+/* If data is a co-ordinate number, store it */
+\end_layout
+
+\begin_layout LyX-Code
+if ( ( data >= '0' ) && ( data <= '9' ) ) {
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+/* Convert the character (data), into a number (value) */
+\end_layout
+
+\begin_layout LyX-Code
+value = data - '0'; 	
+\end_layout
+
+\begin_layout LyX-Code
+/* Add data to T_value */
+\end_layout
+
+\begin_layout LyX-Code
+printf ( "T: %d
+\backslash
+n", T_value );
+\end_layout
+
+\begin_layout LyX-Code
+T_value *= 10;
+\end_layout
+
+\begin_layout LyX-Code
+T_value += value;
+\end_layout
+
+\begin_layout LyX-Code
+/* If T_value is too large set error */
+\end_layout
+
+\begin_layout LyX-Code
+if ( T_value > MAX_DRILL_BITS ) {
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+printf( "
+\backslash
+nError: State T, T_value is too large" );
+\end_layout
+
+\begin_layout LyX-Code
+error = 1;
+\end_layout
+
+\begin_layout LyX-Code
+reset();
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+}
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+} 
+\end_layout
+
+\begin_layout LyX-Code
+/* If data is a C, set state to C */
+\end_layout
+
+\begin_layout LyX-Code
+else if ( data == 'C' ) {
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+state = STATE_C;
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+} else {
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+/* If data is unusable, set error */
+\end_layout
+
+\begin_layout LyX-Code
+printf( "
+\backslash
+nError: State T, invalid character" );
+\end_layout
+
+\begin_layout LyX-Code
+error = 1;
+\end_layout
+
+\begin_layout LyX-Code
+reset();
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+}
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Standard
+There are similar functions for STATE_G and STATE_M.
+ When a co-ordinate line begins a slightly more complicated method of interpreta
+tion is needed, as there may be no change in the X or Y co-ordinate and
+ therefore the line would be half as long.
+ Here is a typical example of a co-ordinate line
+\end_layout
+
+\begin_layout LyX-Code
+X4.872Y3.586
+\end_layout
+
+\begin_layout Standard
+The function handle_x_and_y() is called if the state is STATE_X or STATE_Y.
+ Again, if a number is sent it will be converted into a usable form and
+ stored in a variable.
+ In STATE_X the number is stored in new_target_x and in STATE_Y the number
+ is stored in new_target_y.
+ Just like the letter 'C' in the previous example, if a 'Y' is sent to the
+ function the state will change to STATE_Y.
+ If a character other than a number or a 'Y' is sent, an error will again
+ be set with an accompanying error message.
+ The program makes an exception for the '.' character which is ignored.
+\end_layout
+
+\begin_layout Standard
+When the '
+\backslash
+n' character is sent to the function the co-ordinates are stored.
+ In the normal 
+\begin_inset Quotes eld
+\end_inset
+
+absolute co-ordinates
+\begin_inset Quotes erd
+\end_inset
+
+ mode the program simply stores new_target_x and new_target_y in the variables
+ X_target and Y_target.
+ However, if the header has specified 
+\begin_inset Quotes eld
+\end_inset
+
+relative co-ordinates
+\begin_inset Quotes erd
+\end_inset
+
+ mode the variable 
+\begin_inset Quotes eld
+\end_inset
+
+relative-coordinates
+\begin_inset Quotes erd
+\end_inset
+
+ will be high and the program will detect this.
+ Instead, new_target_x and new_target_y will be added to X_target and Y_target.
+ Once this has taken place the co-ordinates are stored in 
+\begin_inset Quotes eld
+\end_inset
+
+targets [ target_prod ].x
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+targets [ target_prod ].y
+\begin_inset Quotes erd
+\end_inset
+
+, which are defined externally and can be accessed by other programs.
+ Every time a '
+\backslash
+n' character is sent, target_prod is increased by one and reset() is called.
+ reset() makes new_Y_target, new_X_target, G_value, M_value and T_value
+ all equal zero and it is called at the end of every function when a '
+\backslash
+n' character is recieved.
+\end_layout
+
+\begin_layout LyX-Code
+/* Handles data in state X and Y */
+\end_layout
+
+\begin_layout LyX-Code
+static void handle_x_and_y ( char data ) {
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+/* If data is a co-ordinate number, store it */
+\end_layout
+
+\begin_layout LyX-Code
+if ( ( data >= '0' ) && ( data <= '9' ) ) {
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+/* Convert the character (data), into a number (value) */
+\end_layout
+
+\begin_layout LyX-Code
+value = data - '0';
+\end_layout
+
+\begin_layout LyX-Code
+/* If state is X, add data to X_target */
+\end_layout
+
+\begin_layout LyX-Code
+if ( state == STATE_X ) {
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+new_X_target *= 10;
+\end_layout
+
+\begin_layout LyX-Code
+new_X_target += value;
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+} 	
+\end_layout
+
+\begin_layout LyX-Code
+/* If state is Y, add data to Y_target */
+\end_layout
+
+\begin_layout LyX-Code
+else if ( state == STATE_Y ) {
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+new_Y_target *= 10;
+\end_layout
+
+\begin_layout LyX-Code
+new_Y_target += value;
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+}
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+else if ( data == '.' ) {
+\end_layout
+
+\begin_layout LyX-Code
+} 
+\end_layout
+
+\begin_layout LyX-Code
+/* If data is Y, set state to Y */
+\end_layout
+
+\begin_layout LyX-Code
+else if ( data == 'Y' ) {
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+state = STATE_Y;
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+/* If data is a new line operator, store co-ordinates and reset */
+\end_layout
+
+\begin_layout LyX-Code
+else if ( data == '
+\backslash
+r' ) {
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+/* Store co-ordinates in relative or absolute mode */
+\end_layout
+
+\begin_layout LyX-Code
+if ( relative_coordinates == 1 ) {
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+X_target += new_X_target;
+\end_layout
+
+\begin_layout LyX-Code
+Y_target += new_Y_target;
+\end_layout
+
+\begin_layout LyX-Code
+} else {
+\end_layout
+
+\begin_layout LyX-Code
+X_target = new_X_target;
+\end_layout
+
+\begin_layout LyX-Code
+Y_target = new_Y_target;
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+targets [ target_prod ].x = X_target;
+\end_layout
+
+\begin_layout LyX-Code
+targets [ target_prod ].y = Y_target;
+\end_layout
+
+\begin_layout LyX-Code
+printf( "X: %d", new_X_target );
+\end_layout
+
+\begin_layout LyX-Code
+printf( ", Y: %d
+\backslash
+n", new_Y_target );
+\end_layout
+
+\begin_layout LyX-Code
+target_prod += 1;
+\end_layout
+
+\begin_layout LyX-Code
+reset ();
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+/* If data is unusable, set error */
+\end_layout
+
+\begin_layout LyX-Code
+else {
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+printf( "
+\backslash
+nError: State X or Y, invalid character" );
+\end_layout
+
+\begin_layout LyX-Code
+error = 1;
+\end_layout
+
+\begin_layout LyX-Code
+reset();
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+}
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Standard
+All of these functions act in much the same way and together they make up
+ the main part of 
+\begin_inset Quotes eld
+\end_inset
+
+serial.c
+\begin_inset Quotes erd
+\end_inset
+
+ which can now succesfully interpret an Excellon drill file.
+ See the appendix for the full code.
 \end_layout
 
 \begin_layout Subsection
@@ -947,6 +2059,34 @@ Appendices
 
 \begin_layout Subsection
 Code Listings
+\end_layout
+
+\begin_layout Subsubsection
+Manual input of co-ordinates (Cambridge Workshop Program)
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "/home/charlie/xyzebra/src/dlpusb245_control.c"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Interpreting Excellon drill filles
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "/home/charlie/xyzebra/src/rs232/serial.c"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
