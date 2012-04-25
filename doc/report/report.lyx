@@ -3986,7 +3986,7 @@ reference "fig:Interpreter-flowchart"
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \noindent
@@ -4857,10 +4857,9 @@ Buttons
 \end_layout
 
 \begin_layout Standard
-t was decided that a type of user interface was needed in the form of a
+It was decided that a type of user interface was needed in the form of a
  set of buttons for manually controlling forward, backward, left and right
  movement of the drill.
- 
 \end_layout
 
 \begin_layout Standard
@@ -4878,23 +4877,23 @@ The button layout used on the interface is shown in figure z.
  Five buttons are used and laid out in a logical fashion:
 \end_layout
 
-\begin_layout Standard
+\begin_layout Itemize
 ‘R’ (right) – used for movement in the positive x-direction
 \end_layout
 
-\begin_layout Standard
+\begin_layout Itemize
 ‘L’ (left) – used for movement in the negative x-direction
 \end_layout
 
-\begin_layout Standard
+\begin_layout Itemize
 ‘F’ (forward) – used for movement in the positive y-direction
 \end_layout
 
-\begin_layout Standard
+\begin_layout Itemize
 ‘B’ (back) – used for movement in the negative y-direction
 \end_layout
 
-\begin_layout Standard
+\begin_layout Itemize
 ‘D’ (drill) – used to control the up and down movement of the drill and
  also used to clear errors
 \end_layout
@@ -4908,7 +4907,7 @@ Future Work
 \end_layout
 
 \begin_layout Subsection
-Callibrations and Matrices
+Calibrations and Matrices
 \end_layout
 
 \begin_layout Subsubsection
