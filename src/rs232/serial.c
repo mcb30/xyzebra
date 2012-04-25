@@ -322,7 +322,15 @@ static void receive ( char data ) {
  *
  */
 ISR ( USART_RX_vect ) {
+	uint8_t status;
 	char data;
+
+	/* Check for error */
+	status = UCSR0A;
+	if ( status & ( _BV ( FE0 ) | _BV ( DOR0 ) | _BV ( UPE0 ) ) ) {
+		error = 1 ;
+		printf ( "Receiver error flag (%02x)\n", status );
+	}
 
 	/* Pick up character from serial port */
 	data = UDR0;
