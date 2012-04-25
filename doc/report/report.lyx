@@ -4031,7 +4031,7 @@ Manual input of co-ordinates (Cambridge Workshop Program)
 \begin_layout Standard
 \begin_inset CommandInset include
 LatexCommand lstinputlisting
-filename "/home/charlie/xyzebra/src/dlpusb245_control.c"
+filename "../../src/dlpusb245_control.c"
 
 \end_inset
 
@@ -4045,7 +4045,7 @@ Interpreting Excellon drill filles
 \begin_layout Standard
 \begin_inset CommandInset include
 LatexCommand lstinputlisting
-filename "/home/charlie/xyzebra/src/rs232/serial.c"
+filename "../../src/rs232/serial.c"
 
 \end_inset
 
