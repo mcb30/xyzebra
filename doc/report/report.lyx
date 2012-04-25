@@ -1643,9 +1643,16 @@ The rotation speed of the motor depended on the value of the capacitor in
  this with laptops.
  A simple program was devised to scroll through the outputs in a specified
  sequence.
- [refer to appendix?] As with using the laptops, the frequency generated
- would greatly surpass the limit of 200Hz, to recitfy this the program had
- to intergrate 'sleep' commands.
+ As with using the laptops, the frequency generated would greatly surpass
+ the limit of 200Hz, to recitfy this the program had to integrate 
+\begin_inset Quotes eld
+\end_inset
+
+sleep
+\begin_inset Quotes erd
+\end_inset
+
+ commands.
  This made it possible to easily to vary the speed of rotation as well as
  the direction.
  
@@ -1655,11 +1662,10 @@ The rotation speed of the motor depended on the value of the capacitor in
 The next step was to use this idea with the CNC drill, beginning with controllin
 g individual axes.
  The programming lines of the laptops were connected as were the components
- to the inputs of the drill (previously where the control box had been situated)
-, a simple program was created to cycle through outputs representing the
- 4017 outputs and noted in which direction each of the axes moved.
- We then wanted to be able to have the drill move to a specific co-ordinate,
- we did this by creating variables 
+ to the inputs of the drill (previously where the control box had been situated).
+ A simple program was created to cycle through outputs representing the
+ 4017 outputs and it was noted in which direction each of the axes moved.
+ To have the drill move to a specific co-ordinate, variables 
 \begin_inset Quotes eld
 \end_inset
 
@@ -1675,8 +1681,15 @@ y_target
 \begin_inset Quotes erd
 \end_inset
 
- which would be variables that the 'user' types in themselves, in the command
- prompt.
+ were created, which would be variables that the 
+\begin_inset Quotes eld
+\end_inset
+
+user
+\begin_inset Quotes erd
+\end_inset
+
+ could type in themselves via the command prompt.
  This would be constantly corresponding to the variables 
 \begin_inset Quotes eld
 \end_inset
@@ -1694,12 +1707,11 @@ y_position
 \end_inset
 
  which fittingly correspond to the current positions of the drill, in the
- x and y position.
+ X and Y axes.
  The drill stops moving once x_target is equal to x_position (the same for
- the y co-ordinates), if the x and y postions are less than the targets,
+ the Y co-ordinates), if the X and Y positions are less than the targets,
  then the x and y variables increment by one every clocked pulse coming
  from the IC.
- 
 \end_layout
 
 \begin_layout Standard
@@ -1708,7 +1720,6 @@ Error messages were also implemented in the event of unrecognized co-ordinates
  This ensures that the program doesn't go into an unexpected error state
  during movement or even if the drill is moving to unspecified co-ordinates
  which would prove more troublesome in the future.
- 
 \end_layout
 
 \begin_layout Standard
@@ -1723,13 +1734,13 @@ Proof of Concept
 \end_layout
 
 \begin_layout Standard
-Once a program able to drive an independant stepper motor had been created,
- the next task was to connect it to the stepper motors within the Mini Mill.
+Once a program able to drive an independent stepper motor had been created,
+ the next task was to connect it to the stepper motors within the mini-mill.
  Having already reverse-engineered the circuitry within the machine itself,
  it was possible to identify the four inputs to each of the stepper motors
- and connect them to a breadboard via the rs232 cable.
- The dlpusb245 was then connected to the same breadboard, allowing the motors
- to be controlled from a laptop.
+ and connect them to a breadboard via the ribbon cable.
+ The DLP-USB245R was then connected to the same breadboard, allowing the
+ motors to be controlled from a laptop.
  The existing program was then able to drive the drill in the X and Y directions
  both forward and backwards.
 \end_layout
@@ -1740,16 +1751,19 @@ A separate program then needed to be created in order to move the drill
  For the previous program a sequence of 1000 steps moved the drill 1cm.
  As the movement distance in the X direction is 28cm and the movement distance
  in the Y direction is 18cm, the maximum drill co-ordinates, in terms of
- steps, is ( 28000, 18000 ).
+ steps, is 
+\begin_inset Formula $\left(28000,18000\right)$
+\end_inset
+
+.
  The drill has no way of sending its current set of co-ordinates to the
- laptop, so a system of callibrating the drill was needed.
+ laptop, so a system of calibrating the drill was needed.
  The only drill locations where the spatial co-ordinates can be accurately
- predicted are the four corners, so when we created our new program we made
- sure that as soon as it begins the drill is set to run into the top-right
- hand corner.
+ predicted are the four corners, so the new program was made so that as
+ soon as it begins the drill is set to run into the top-right hand corner.
  To do this the motors are initially given the instruction to move 30,000
  steps in the X axis and 20,000 steps in the Y axis.
- This runs the drill into the bottom corner regardless of its initial position,
+ This runs the drill into the corner regardless of its initial position,
  as it is attempting to move the total distance of the whole movement plane.
 \end_layout
 
@@ -1759,16 +1773,20 @@ A separate program then needed to be created in order to move the drill
 \end_layout
 
 \begin_layout LyX-Code
-being sent.
- This runs the drill into the top-right hand corner */
+ * being sent.
+ This runs the drill into the top-right hand corner
 \end_layout
 
 \begin_layout LyX-Code
-lusbrc = move_to_target ( &device, 30000, 20000, 0, 0 )
+ */
+\end_layout
+
+\begin_layout LyX-Code
+lusbrc = move_to_target ( &device, 30000, 20000, 0, 0 );
 \end_layout
 
 \begin_layout Standard
-When x and y co-ordinates are sent to our program they are stored in two
+When X and Y co-ordinates are sent to our program they are stored in two
  variables named 
 \begin_inset Quotes eld
 \end_inset
@@ -1786,9 +1804,8 @@ target_y
 \end_inset
 
 .
- As these inputed co-ordinates are in centimeters, they are multiplied by
- 1000 before being stored as this will give the distance in terms of the
- number of steps.
+ As these co-ordinates are in centimetres, they are multiplied by 1000 before
+ being stored as this will give the distance in terms of the number of steps.
 \end_layout
 
 \begin_layout LyX-Code
@@ -1816,16 +1833,12 @@ unsigned int target_y;
 \end_layout
 
 \begin_layout LyX-Code
-/* This loop takes the inputted co-ordinates, multiplies by 1000 and stores
+/* This loop takes the input co-ordinates, multiplies by 1000 and stores
  them */
 \end_layout
 
 \begin_layout LyX-Code
-while ( 1 )
-\end_layout
-
-\begin_layout LyX-Code
-{
+while ( 1 ) {
 \end_layout
 
 \begin_deeper
@@ -1847,9 +1860,29 @@ target_y = a_target_y*1000;
 \end_layout
 
 \begin_layout Standard
-The program also holds two other variables named simply 'x' and 'y'.
+The program also holds two other variables named simply 
+\begin_inset Quotes eld
+\end_inset
+
+x
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+y
+\begin_inset Quotes erd
+\end_inset
+
+.
  These variables are supposed to represent the current position of the drill
- and so they begin at ( 0, 0 ).
+ and so they begin at 
+\begin_inset Formula $\left(0,0\right)$
+\end_inset
+
+.
  When 
 \begin_inset Quotes eld
 \end_inset
@@ -1866,17 +1899,78 @@ target_y
 \begin_inset Quotes erd
 \end_inset
 
- recieve values, the program checks to see if 'x' and 'y' are less than,
- equal to or greater than them.
+ receive values, the program checks to see if 
+\begin_inset Quotes eld
+\end_inset
+
+x
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+y
+\begin_inset Quotes erd
+\end_inset
+
+ are less than, equal to or greater than them.
  If they are less (as they will be initially) then the stepper motors are
  instructed to drive through their sequence forwards.
- Every time the x or y motor advances a step, the corresponding 'x' or 'y'
+ Every time the X or Y motor advances a step, the corresponding 
+\begin_inset Quotes eld
+\end_inset
+
+x
+\begin_inset Quotes erd
+\end_inset
+
+ or 
+\begin_inset Quotes eld
+\end_inset
+
+y
+\begin_inset Quotes erd
+\end_inset
+
  variable is incremented until it equals its target value.
- When both 'x' and 'y' equal their target values the drill will be in the
- correct position and the program is ready to recieve a new co-ordinate.
- If this co-ordinate is then less than 'x' and 'y', the stepper sequence
- will run backwards and the position variables will decrement every step.
- 
+ When both 
+\begin_inset Quotes eld
+\end_inset
+
+x
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+y
+\begin_inset Quotes erd
+\end_inset
+
+ equal their target values the drill will be in the correct position and
+ the program is ready to recieve a new co-ordinate.
+ If this co-ordinate is then less than 
+\begin_inset Quotes eld
+\end_inset
+
+x
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+y
+\begin_inset Quotes erd
+\end_inset
+
+, the stepper sequence will run backwards and the position variables will
+ decrement every step.
 \end_layout
 
 \begin_layout LyX-Code
@@ -1905,11 +1999,7 @@ co-ordinates */
 \end_layout
 
 \begin_layout LyX-Code
-while ( ( x != target_x ) || ( y != target_y ) )
-\end_layout
-
-\begin_layout LyX-Code
-{ 
+while ( ( x != target_x ) || ( y != target_y ) ) { 
 \end_layout
 
 \begin_deeper
@@ -1936,7 +2026,11 @@ bits = ( full_step_y.bits [ y % 4 ] | full_step_x.bits [ x % 4 ] );
 \end_layout
 
 \begin_layout LyX-Code
-if ( ( lusbrc = set_output_value ( device, bits ) ) < 0 ) return lusbrc;
+if ( ( lusbrc = set_output_value ( device, bits ) ) < 0 )
+\end_layout
+
+\begin_layout LyX-Code
+    return lusbrc;
 \end_layout
 
 \begin_layout LyX-Code
@@ -1948,7 +2042,11 @@ if ( ( lusbrc = set_output_value ( device, bits ) ) < 0 ) return lusbrc;
 \end_layout
 
 \begin_layout LyX-Code
-cycle speed */
+ * cycle speed
+\end_layout
+
+\begin_layout LyX-Code
+ */
 \end_layout
 
 \begin_layout LyX-Code
@@ -1965,23 +2063,51 @@ usleep ( 1000 );
 \end_layout
 
 \begin_layout LyX-Code
-decreases them if they are larger */
+ * decreases them if they are larger
 \end_layout
 
 \begin_layout LyX-Code
-if ( x < target_x ) { x++; }
+ */
 \end_layout
 
 \begin_layout LyX-Code
-else if ( x > target_x ) { x--; } 
+if ( x < target_x ) {
 \end_layout
 
 \begin_layout LyX-Code
-if ( y < target_y ) { y++; }
+    x++;
 \end_layout
 
 \begin_layout LyX-Code
-else if ( y > target_y ) { y--; }
+} else if ( x > target_x ) {
+\end_layout
+
+\begin_layout LyX-Code
+    x--;
+\end_layout
+
+\begin_layout LyX-Code
+} 
+\end_layout
+
+\begin_layout LyX-Code
+if ( y < target_y ) {
+\end_layout
+
+\begin_layout LyX-Code
+    y++;
+\end_layout
+
+\begin_layout LyX-Code
+} else if ( y > target_y ) {
+\end_layout
+
+\begin_layout LyX-Code
+    y--;
+\end_layout
+
+\begin_layout LyX-Code
+}
 \end_layout
 
 \end_deeper
@@ -2106,19 +2232,6 @@ name "fig:Panda_image"
 \end_inset
 
 
-\end_layout
-
-\begin_layout Standard
-See the appendix for the code in full.
- The program is named 
-\begin_inset Quotes eld
-\end_inset
-
-dlpusb245_control.c
-\begin_inset Quotes erd
-\end_inset
-
-.
 \end_layout
 
 \begin_layout Section
