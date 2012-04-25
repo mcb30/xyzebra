@@ -3989,9 +3989,11 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+\noindent
+\align center
 \begin_inset Graphics
-	filename Drill File Interpreter Flowchart.jpg
-	width 18cm
+	filename ../../src/flowcharts/rs232.eps
+	height 90theight%
 	rotateAngle 270
 
 \end_inset
