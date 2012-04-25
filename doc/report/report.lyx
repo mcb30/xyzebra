@@ -2392,6 +2392,18 @@ sideways false
 status collapsed
 
 \begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../../src/flowcharts/buttons_1.eps
+	height 90theight%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
 \begin_inset Caption
 
 \begin_layout Plain Layout
@@ -2419,6 +2431,18 @@ sideways false
 status collapsed
 
 \begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../../src/flowcharts/buttons_2.eps
+	height 90theight%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
 \begin_inset Caption
 
 \begin_layout Plain Layout
@@ -2434,10 +2458,6 @@ name "fig:User-interaction:-manual"
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Plain Layout
 
 \end_layout
 
@@ -2715,7 +2735,7 @@ CNC Control
 After the success of controlling the CNC with co-ordinates typed in by the
  user, the next step would be interepreting individual co-ordinates from
  drill files.
- The next step was to make the target x and y variables update automatically
+ The next step was to make the target X and Y variables update automatically
  according to a list.
  For example, a block of text containing x and y co-ordinates would be translate
 d into x_target and y_target co-ordinates.
