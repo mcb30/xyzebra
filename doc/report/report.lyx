@@ -3,6 +3,18 @@
 \begin_document
 \begin_header
 \textclass article
+\begin_preamble
+\renewenvironment{lyxcode}
+{\begin{list}{}{
+\small
+\setlength{\rightmargin}{\leftmargin}
+\raggedright
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\normalfont\ttfamily}%
+\item[]}
+{\end{list}}
+\end_preamble
 \use_default_options true
 \language english
 \inputencoding auto
