@@ -99,6 +99,16 @@ LatexCommand tableofcontents
 Abstract - Charlie - 1
 \end_layout
 
+\begin_layout Standard
+Our project has been to take a TEP Mini-Mill that was originally programmed
+ with a dedicated control box and the program stored on a Smart Card and
+ bring it back into use in school.
+ We wanted to be able to take Drill files from PCB design software and control
+ the drilling sequence of the mini-mill to automate drilling printed circuit
+ boards.
+ We have also incorporated a laser alignment system.
+\end_layout
+
 \begin_layout Section
 Problem - Mel - 1
 \end_layout
@@ -196,7 +206,29 @@ Reverse Engineering the Circuit Board - Pippa - 4
 \begin_layout Standard
 
 \series bold
-Did we still ask them to send documents to school? What did we do instead?
+The mini mill had a control box that would allow manual control of the milling
+ tool – to move it around in the x and y directions and to operate the solenoid
+ that raised and lowered the milling tool.
+ This control box would also allow designs to be stored on a Smart card
+ (like a credit card with a memory IC in it).
+ We did not want to use this as our project intended to design and store
+ programs on a laptop/pc.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+The driver box in the mill made the x and y stepper motors step and powered
+ the ‘z axis’ solenoid.
+ This what done with a circuit consisting of MOSFETs used as current drivers
+ for the coils on the x and y stepper motors.
+ We spent some time at the Cambridge University workshop reverse engineering
+ the circuit used in this driver box – we studied the circuit board and
+ drew up the circuit on a white board.
+ This took a long time but we were pleased to finally produce a circuit
+ diagram for the control circuit.
+ 
 \end_layout
 
 \begin_layout Subsection
@@ -3669,6 +3701,30 @@ The transformation matrix for a rotation of an angle
 
 \begin_layout Section
 Acknowledgements - Pippa - 1
+\end_layout
+
+\begin_layout Standard
+We have to thank a lot of people for the help they gave us.
+ In particular our thanks go to Michael, our engineer, for the fun project
+ he gave us, for the time he put in with us at the university workshop and
+ coming to school practically every week to help us progress the project
+ and for his expertise in programming and electronics.
+ He also gave us a great tour of Cambridge and lunch during the workshop.
+\end_layout
+
+\begin_layout Standard
+Thanks to Mr Woolley and Mrs Tynan for making it possible to take part in
+ the Scheme and to Colin Clifton and EESE staff at both the launch and the
+ workshop.
+ Thanks also go to Cambridge Engineering department for hosting the workshop
+ and to the staff who helped us find the things we needed there.
+ We also enjoyed staying at St Catherine’s College and the lecture on Noise
+ Reduction in aircraft design at the Cavendish Laboratory!
+\end_layout
+
+\begin_layout Standard
+Finally thanks to Fiona Austin at MUTR who managed to find a copy of the
+ manual for the Mini-mill and milling tools.
 \end_layout
 
 \begin_layout Section
