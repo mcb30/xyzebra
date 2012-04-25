@@ -2737,7 +2737,7 @@ After the success of controlling the CNC with co-ordinates typed in by the
  drill files.
  The next step was to make the target X and Y variables update automatically
  according to a list.
- For example, a block of text containing x and y co-ordinates would be translate
+ For example, a block of text containing X and Y co-ordinates would be translate
 d into x_target and y_target co-ordinates.
  These were called the producer and consumer, the program starts off with
  a number of co-ordinates in the producer (these are the co-ordinates typed
@@ -2750,8 +2750,7 @@ these become the consumer - finished co-ordinates.
  into co-ordinates), there needed to be a way to make sure the program wouldn't
  register them as co-ordinates and go into a random error state.
  It was here we further utilised error states in using colour coded LEDs,
- Red meaning error, Orange meaning processing and Green meaning idle.
- 
+ Red meaning error, Yellow meaning processing and Green meaning idle.
 \end_layout
 
 \begin_layout Standard
@@ -2759,7 +2758,7 @@ To check to see if the drill was in an error state, this code was implemented:
 \end_layout
 
 \begin_layout LyX-Code
-/** * Update CNC controller * */ 
+/** Update CNC controller */ 
 \end_layout
 
 \begin_layout LyX-Code
@@ -2767,9 +2766,35 @@ To check to see if the drill was in an error state, this code was implemented:
 \end_layout
 
 \begin_layout LyX-Code
-static void cnc_update ( void ) { static uint16_t x_pos = 0; static uint16_t
- y_pos = 0; static uint16_t drill_counter; uint8_t stepper_b; uint8_t stepper_d;
- static uint16_t x_target; static uint16_t y_target; 
+static void cnc_update ( void ) {
+\end_layout
+
+\begin_layout LyX-Code
+    static uint16_t x_pos = 0;
+\end_layout
+
+\begin_layout LyX-Code
+    static uint16_t y_pos = 0;
+\end_layout
+
+\begin_layout LyX-Code
+    static uint16_t drill_counter;
+\end_layout
+
+\begin_layout LyX-Code
+    uint8_t stepper_b;
+\end_layout
+
+\begin_layout LyX-Code
+    uint8_t stepper_d;
+\end_layout
+
+\begin_layout LyX-Code
+    static uint16_t x_target;
+\end_layout
+
+\begin_layout LyX-Code
+    static uint16_t y_target; 
 \end_layout
 
 \begin_layout LyX-Code
@@ -2777,40 +2802,23 @@ static void cnc_update ( void ) { static uint16_t x_pos = 0; static uint16_t
 \end_layout
 
 \begin_layout LyX-Code
-/* Check to see if there's an error */ 
+    /* Check to see if there's an error */ 
 \end_layout
 
 \begin_layout LyX-Code
-if ( error == 1 ) { PORT_SOLENOID |= _BV ( SOLENOID ); return; } 
+    if ( error == 1 ) {
 \end_layout
 
 \begin_layout LyX-Code
-
+        PORT_SOLENOID |= _BV ( SOLENOID );
 \end_layout
 
 \begin_layout LyX-Code
-/* Update stepper motor outputs */ 
+        return;
 \end_layout
 
 \begin_layout LyX-Code
-x_pos = x_pos + sign (x_target - x_pos); 
-\end_layout
-
-\begin_layout LyX-Code
-y_pos = y_pos + sign (y_target - y_pos);
-\end_layout
-
-\begin_layout LyX-Code
-stepper_b = ( x_stepper[x_pos % 4].portb | y_stepper[y_pos % 4].portb );
-\end_layout
-
-\begin_layout LyX-Code
-stepper_d = ( x_stepper[x_pos % 4].portd | y_stepper[y_pos % 4].portd ); PORTB
- = ( ( PORTB & ~STEPPER_MASK_B ) | stepper_b );
-\end_layout
-
-\begin_layout LyX-Code
-PORTD = ( ( PORTD & ~STEPPER_MASK_D ) | stepper_d );
+    } 
 \end_layout
 
 \begin_layout LyX-Code
@@ -2818,23 +2826,33 @@ PORTD = ( ( PORTD & ~STEPPER_MASK_D ) | stepper_d );
 \end_layout
 
 \begin_layout LyX-Code
-/* Is position at target? */ 
+    /* Update stepper motor outputs */ 
 \end_layout
 
 \begin_layout LyX-Code
-if ( ( x_pos != x_target ) || ( y_pos != y_target ) ) { 
+    x_pos = x_pos + sign (x_target - x_pos); 
 \end_layout
 
 \begin_layout LyX-Code
-/* Solenoid down */ PORT_SOLENOID |= _BV ( SOLENOID ); 
+    y_pos = y_pos + sign (y_target - y_pos);
 \end_layout
 
 \begin_layout LyX-Code
-return; 
+    stepper_b = ( x_stepper[x_pos % 4].portb | y_stepper[y_pos % 4].portb
+ );
 \end_layout
 
 \begin_layout LyX-Code
-}
+    stepper_d = ( x_stepper[x_pos % 4].portd | y_stepper[y_pos % 4].portd
+ );
+\end_layout
+
+\begin_layout LyX-Code
+    PORTB = ( ( PORTB & ~STEPPER_MASK_B ) | stepper_b );
+\end_layout
+
+\begin_layout LyX-Code
+    PORTD = ( ( PORTD & ~STEPPER_MASK_D ) | stepper_d );
 \end_layout
 
 \begin_layout LyX-Code
@@ -2842,11 +2860,27 @@ return;
 \end_layout
 
 \begin_layout LyX-Code
-/* Is drill counter 0? */ 
+    /* Is position at target? */ 
 \end_layout
 
 \begin_layout LyX-Code
-if ( drill_counter != 0 ) { drill_counter--;
+    if ( ( x_pos != x_target ) || ( y_pos != y_target ) ) { 
+\end_layout
+
+\begin_layout LyX-Code
+        /* Solenoid down */
+\end_layout
+
+\begin_layout LyX-Code
+        PORT_SOLENOID |= _BV ( SOLENOID ); 
+\end_layout
+
+\begin_layout LyX-Code
+        return;
+\end_layout
+
+\begin_layout LyX-Code
+    }
 \end_layout
 
 \begin_layout LyX-Code
@@ -2854,38 +2888,73 @@ if ( drill_counter != 0 ) { drill_counter--;
 \end_layout
 
 \begin_layout LyX-Code
-/* Solenoid up */ 
+    /* Is drill counter 0? */ 
 \end_layout
 
 \begin_layout LyX-Code
-PORT_SOLENOID &= ~_BV ( SOLENOID ); 
+    if ( drill_counter != 0 ) {
 \end_layout
 
 \begin_layout LyX-Code
-return; 
+        drill_counter--;
 \end_layout
 
 \begin_layout LyX-Code
-}
+
 \end_layout
 
 \begin_layout LyX-Code
-PORT_SOLENOID |= _BV ( SOLENOID ); 
+        /* Solenoid up */ 
+\end_layout
+
+\begin_layout LyX-Code
+        PORT_SOLENOID &= ~_BV ( SOLENOID ); 
+\end_layout
+
+\begin_layout LyX-Code
+        return; 
+\end_layout
+
+\begin_layout LyX-Code
+    }
+\end_layout
+
+\begin_layout LyX-Code
+    PORT_SOLENOID |= _BV ( SOLENOID ); 
 \end_layout
 
 \begin_layout Standard
-After the new x and y targets were found, the program needed to recognize
+After the new X and Y targets were found, the program needed to recognize
  where those co-ordinates were in relative to its position.
- To do this, a 'sign function' was created which uses the principle that
- If the x_target - x_position was positive (I.e the x_position relative to
- the x_target was positive), then it needed to carry on moving to the right
- (right is positive in this case), if it was negative then it needed to
- move left and if it was 0, then the x_position had reached x_target and
- that axis could stop moving.
+ To do this, a 
+\begin_inset Quotes eld
+\end_inset
+
+sign function
+\begin_inset Quotes erd
+\end_inset
+
+ was created which uses the principle that If the x_target - x_position
+ was positive (i.e.
+\begin_inset space ~
+\end_inset
+
+the x_position relative to the x_target was positive), then it needed to
+ carry on moving to the right (right is positive in this case), if it was
+ negative then it needed to move left and if it was 0, then the x_position
+ had reached x_target and that axis could stop moving.
  This would result in a square motion of the drill.
  To make the stepper rotate accordingly (clockwise or anticlockwise), the
- 'mod' function was used, this told the stepper motor what orientation the
- shaft should be.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+mod
+\begin_inset Quotes erd
+\end_inset
+
+ function was used, this told the stepper motor what orientation the shaft
+ should be.
  For example, we had a storage device within the program containing 4 outputs,
  recognizable as [1100 0110 0011 1001] by using the mod function on x_position
  and y_position, the stepper motor would know whether to rotate positively
@@ -2895,43 +2964,47 @@ After the new x and y targets were found, the program needed to recognize
 \end_layout
 
 \begin_layout Standard
-The 'sign' function was then developed into code:
+The 
+\begin_inset Quotes eld
+\end_inset
+
+sign
+\begin_inset Quotes erd
+\end_inset
+
+ function was then developed into code:
 \end_layout
 
 \begin_layout LyX-Code
-static signed 
+static signed int sign ( signed int k ) { 
 \end_layout
 
 \begin_layout LyX-Code
-int sign ( signed int k ) { 
+    if ( k > 0 ) {
 \end_layout
 
 \begin_layout LyX-Code
-if ( k > 0 ) { return +1; 
+        return +1; 
 \end_layout
 
 \begin_layout LyX-Code
-} 
+    } else if ( k < 0 ) { 
 \end_layout
 
 \begin_layout LyX-Code
-else if ( k < 0 ) 
+        return -1;
 \end_layout
 
 \begin_layout LyX-Code
-{ 
+    } else {
 \end_layout
 
 \begin_layout LyX-Code
-return -1;
+        return 0;
 \end_layout
 
 \begin_layout LyX-Code
-} 
-\end_layout
-
-\begin_layout LyX-Code
-else { return 0; }
+    }
 \end_layout
 
 \begin_layout LyX-Code
@@ -2947,20 +3020,31 @@ For a safety feature (as well as practicality), if the dril had not reached
  and drill the hole.
  To make sure the motion wasn't too fast (otherwise this could break the
  drill bit but also dril a non-uniform hole) a timer was implemented into
- the system (Being to made to last a couple of seconds, which was acceptable).
+ the system (being to made to last a couple of seconds, which was acceptable).
  
 \end_layout
 
 \begin_layout Standard
 When the counter equalled 0, if there were no more co-ordinates to drill
- (I.e.
- the number of co-ordinates in the producer is equal to the consumer - all
- the produced co-ordinates had been 'consumed'), the activity led is set
- low (to signify that the program has finsihed) and the program ends.
+ (i.e.
+\begin_inset space ~
+\end_inset
+
+the number of co-ordinates in the producer is equal to the consumer - all
+ the produced co-ordinates had been 
+\begin_inset Quotes eld
+\end_inset
+
+consumed
+\begin_inset Quotes erd
+\end_inset
+
+), the activity led is set low (to signify that the program has finsihed)
+ and the program ends.
  If the producer doesnt equal the consumer, then one is added to the consumer
- (as the program as drilled one co-ordinate, so it needs to be consumed)
+ (as the program has drilled one co-ordinate, so it needs to be consumed)
  and the next producer becomes the new target.
- (We again split up the producer and consumer into it's x and y constituents.)
+ (We again split up the producer and consumer into its x and y constituents.)
 \end_layout
 
 \begin_layout Standard
@@ -2996,8 +3080,8 @@ status collapsed
 \noindent
 \align center
 \begin_inset Graphics
-	filename Target flowchart.eps
-	width 100text%
+	filename /home/mcb30/work/extcvs/xyzebra/src/flowcharts/Targetflowchart.eps
+	height 90theight%
 
 \end_inset
 
