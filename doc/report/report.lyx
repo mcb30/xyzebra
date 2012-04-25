@@ -2246,40 +2246,35 @@ Manual Control & RS232 PCBs
 In order to communicate with the CNC milling machine and to get it to do
  precisely what is required, an interface is needed in the form of a circuit
  board with buttons controlling drilling and movement in the x and y-directions.
- To make this, several processes are used.
+ To make this, several processes are used:
 \end_layout
 
-\begin_layout Standard
-Manufacturing PCBs (printed circuit board) 
-\end_layout
-
-\begin_layout Standard
+\begin_layout Itemize
 The PCB artwork is designed on KiCad It is then printed onto a transparency
  sheet using a laser jet printer (otherwise the ink won't stick).
  
 \end_layout
 
-\begin_layout Standard
+\begin_layout Itemize
 The photo etch PCB board is cut to size to fit the artwork on exactly.
  
 \end_layout
 
-\begin_layout Standard
-The artwork is attached face down onto a UV exposure light box*.
- 
+\begin_layout Itemize
+The artwork is attached face down onto a UV exposure light box.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Itemize
 After having removed the protective layer, the photo etch PCB board is placed
  copper side down on top of the artwork.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Itemize
 Once the board has been exposed to the UV light, it needs to be developed.
  
 \end_layout
 
-\begin_layout Standard
+\begin_layout Itemize
 A developing solution is made which is comprised of 1 part liquid photo-resist
  developer concentrate and 9 parts water.
  The board is left in the solution until the text written on the board just
@@ -2289,33 +2284,31 @@ A developing solution is made which is comprised of 1 part liquid photo-resist
  
 \end_layout
 
-\begin_layout Standard
+\begin_layout Itemize
 To make the etching solution, 1 part fine etch crystals is mixed with 1
  part water heated to 50 ºC.
  
 \end_layout
 
-\begin_layout Standard
+\begin_layout Itemize
 The developed board is placed into the preheated PCB processing tank for
  about 15 minutes or until all the copper has been etched away.
  
 \end_layout
 
-\begin_layout Standard
+\begin_layout Itemize
 The board is removed from the tank and rinsed well.
  
 \end_layout
 
-\begin_layout Standard
+\begin_layout Itemize
 At this stage, it is time for the PCB to be drilled.
  Once drilled, components of the circuit can now be soldered into place,
  producing a completed circuit board.
 \end_layout
 
-\begin_layout Standard
-
-\emph on
-*How the light box works 
+\begin_layout Subsubsection
+How the light box works
 \end_layout
 
 \begin_layout Standard
@@ -2329,29 +2322,6 @@ The photo etch PCB board consists of a layer of copper and a layer of etch
  off when placed into the etching solution.
 \end_layout
 
-\begin_layout Standard
-\begin_inset Float figure
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-A photo of one of our completed circuit boards
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
 \begin_layout Subsection
 Flowcharts & Event-based Programming
 \end_layout
@@ -2359,7 +2329,7 @@ Flowcharts & Event-based Programming
 \begin_layout Standard
 To understand how the commands sent to the milling machine are pieced together,
  it was necessary to plan out the programs in the form of flowcharts before
- turning them into C++ code (a general-purpose programming language).
+ turning them into C code (a general-purpose programming language).
  
 \end_layout
 
@@ -2369,25 +2339,42 @@ At first, it seemed like a very tricky concept to understand, since a single
  flow chart.
  For example, in order to clear an error, there has to be one flowchart
  to check for an error and then depending on the outcome, the variable,
- clear_error, is set to either 1 or 0, since it is a Boolean value (See
- flowchart).
+ clear_error, is set to either 1 or 0, since it is a Boolean value (see
+ figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:User-interaction:-clearing"
+
+\end_inset
+
+).
  
 \end_layout
 
 \begin_layout Standard
 This flowchart is carried on to also set another variable, manual drill.
  Since it is decided by the user when to clear an error, it is only possible
- for the program to store the fact that the clear error button (the ‘D’
+ for the program to store the fact that the clear error button (the 
+\begin_inset Quotes eld
+\end_inset
+
+D
+\begin_inset Quotes erd
+\end_inset
+
  button) has been pressed.
  However, the error cannot actually be cleared by the first flowchart, it
  can only be stored.
- 
 \end_layout
 
 \begin_layout Standard
 To clear the error, a second flowchart, and therefore a separate part of
  code is needed.
- For other actions, like movement in the x- and y-directions and drilling,
+ For other actions, like movement in the X and Y directions and drilling,
  the same principle is used.
  
 \end_layout
@@ -2399,8 +2386,60 @@ There is one flowchart for keeping track of the buttons that have been pressed,
 \end_layout
 
 \begin_layout Standard
-\begin_inset Graphics
-	filename /home/abi/Documents/Clear Error (flowchart) eee.eps
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+User interaction: clearing an error state
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:User-interaction:-clearing"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+User interaction: manual control
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:User-interaction:-manual"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
 
 \end_inset
 
@@ -2408,23 +2447,12 @@ There is one flowchart for keeping track of the buttons that have been pressed,
 \end_layout
 
 \begin_layout Standard
-\begin_inset Graphics
-	filename /home/abi/Documents/Manual control part 2 eeee.eps
-	width 100text%
-
-\end_inset
-
-
+It is easier to write the code if flowcharts are produced initially, therefore
+ the code is written based on the flowcharts.
 \end_layout
 
-\begin_layout Standard
-It is made easier to write the code if flowcharts are produced initially,
- therefore the code in order to program the circuit board is written based
- on the flowcharts.
-\end_layout
-
-\begin_layout Standard
-Code for Button Control:
+\begin_layout Subsubsection
+Code for Button Control
 \end_layout
 
 \begin_layout Standard
@@ -2513,11 +2541,11 @@ static void buttons_pressed ( uint8_t buttons ) {
 \end_layout
 
 \begin_layout LyX-Code
-static uint8_t clear_error = 0;
+    static uint8_t clear_error = 0;
 \end_layout
 
 \begin_layout LyX-Code
-uint8_t temp;
+    uint8_t temp;
 \end_layout
 
 \begin_layout Standard
@@ -2525,47 +2553,47 @@ Clearing errors is controlled by this part of the code:
 \end_layout
 
 \begin_layout LyX-Code
-/* clear error */
+    /* clear error */
 \end_layout
 
 \begin_layout LyX-Code
-if ( error ) {
+    if ( error ) {
 \end_layout
 
 \begin_layout LyX-Code
-if ( ! ( buttons & _BV ( DONE ) ) ) {
+        if ( ! ( buttons & _BV ( DONE ) ) ) {
 \end_layout
 
 \begin_layout LyX-Code
-clear_error = 1;
+            clear_error = 1;
 \end_layout
 
 \begin_layout LyX-Code
-} else {
+        } else {
 \end_layout
 
 \begin_layout LyX-Code
-if ( clear_error == 1 ) {
+            if ( clear_error == 1 ) {
 \end_layout
 
 \begin_layout LyX-Code
-clear_error = 0;
+                clear_error = 0;
 \end_layout
 
 \begin_layout LyX-Code
-error = 0;
+                error = 0;
 \end_layout
 
 \begin_layout LyX-Code
-}
+            }
 \end_layout
 
 \begin_layout LyX-Code
-}
+        }
 \end_layout
 
 \begin_layout LyX-Code
-}
+    }
 \end_layout
 
 \begin_layout Standard
@@ -2574,27 +2602,27 @@ The up and down movement of the drill is controlled by this part of the
 \end_layout
 
 \begin_layout LyX-Code
-/* Set manual_drill=1 iff D button is pressed */
+    /* Set manual_drill=1 iff D button is pressed */
 \end_layout
 
 \begin_layout LyX-Code
-if ( ! ( buttons & _BV ( DONE ) ) ) {
+    if ( ! ( buttons & _BV ( DONE ) ) ) {
 \end_layout
 
 \begin_layout LyX-Code
-manual_drill = 1;
+        manual_drill = 1;
 \end_layout
 
 \begin_layout LyX-Code
-} else {
+    } else {
 \end_layout
 
 \begin_layout LyX-Code
-manual_drill = 0;
+        manual_drill = 0;
 \end_layout
 
 \begin_layout LyX-Code
-}
+    }
 \end_layout
 
 \begin_layout Standard
@@ -2603,39 +2631,39 @@ The forward and backward movement of the drill is controlled by this part
 \end_layout
 
 \begin_layout LyX-Code
-/* Set manual_y to +1, 0 or -1 based in F and B buttons */
+    /* Set manual_y to +1, 0 or -1 based in F and B buttons */
 \end_layout
 
 \begin_layout LyX-Code
-temp = 0;
+    temp = 0;
 \end_layout
 
 \begin_layout LyX-Code
-if ( ! ( buttons & _BV ( FORWARD ) ) ) {
+    if ( ! ( buttons & _BV ( FORWARD ) ) ) {
 \end_layout
 
 \begin_layout LyX-Code
-temp += 1;
+        temp += 1;
 \end_layout
 
 \begin_layout LyX-Code
-}
+    }
 \end_layout
 
 \begin_layout LyX-Code
-if ( ! ( buttons & _BV ( BACKWARD ) ) ) {
+    if ( ! ( buttons & _BV ( BACKWARD ) ) ) {
 \end_layout
 
 \begin_layout LyX-Code
-temp -= 1;
+        temp -= 1;
 \end_layout
 
 \begin_layout LyX-Code
-}
+    }
 \end_layout
 
 \begin_layout LyX-Code
-manual_y = temp;
+    manual_y = temp;
 \end_layout
 
 \begin_layout Standard
@@ -2644,131 +2672,39 @@ The left and right movement of the drill is controlled by this part of the
 \end_layout
 
 \begin_layout LyX-Code
-/* Set manual_x to +1, 0 or -1 based in L and R buttons */ 
+    /* Set manual_x to +1, 0 or -1 based in L and R buttons */ 
 \end_layout
 
 \begin_layout LyX-Code
-temp = 0;
+    temp = 0;
 \end_layout
 
 \begin_layout LyX-Code
-if ( ! ( buttons & _BV ( LEFT ) ) ) {
+    if ( ! ( buttons & _BV ( LEFT ) ) ) {
 \end_layout
 
 \begin_layout LyX-Code
-temp -= 1;
+        temp -= 1;
 \end_layout
 
 \begin_layout LyX-Code
-}
+    }
 \end_layout
 
 \begin_layout LyX-Code
-if ( ! ( buttons & _BV ( RIGHT ) ) ) {
+    if ( ! ( buttons & _BV ( RIGHT ) ) ) {
 \end_layout
 
 \begin_layout LyX-Code
-temp += 1;
+        temp += 1;
 \end_layout
 
 \begin_layout LyX-Code
-}
+    }
 \end_layout
 
 \begin_layout LyX-Code
-manual_x = temp;
-\end_layout
-
-\begin_layout LyX-Code
-}
-\end_layout
-
-\begin_layout LyX-Code
-/**
-\end_layout
-
-\begin_layout LyX-Code
-* Pin change ISR
-\end_layout
-
-\begin_layout LyX-Code
-*
-\end_layout
-
-\begin_layout LyX-Code
-*/
-\end_layout
-
-\begin_layout LyX-Code
-ISR ( PCINT1_vect ) {
-\end_layout
-
-\begin_layout LyX-Code
-uint8_t buttons;
-\end_layout
-
-\begin_layout LyX-Code
-/* Read button state */
-\end_layout
-
-\begin_layout LyX-Code
-buttons = PIN_BUTTONS;
-\end_layout
-
-\begin_layout LyX-Code
-/* Handle change of button state */
-\end_layout
-
-\begin_layout LyX-Code
-buttons_pressed ( buttons );
-\end_layout
-
-\begin_layout LyX-Code
-}
-\end_layout
-
-\begin_layout LyX-Code
-/**
-\end_layout
-
-\begin_layout LyX-Code
-* Initialise buttons
-\end_layout
-
-\begin_layout LyX-Code
-*
-\end_layout
-
-\begin_layout LyX-Code
-*/
-\end_layout
-
-\begin_layout LyX-Code
-void buttons_init ( void ) {
-\end_layout
-
-\begin_layout LyX-Code
-/* Configure buttons with internal pull-up resistors */
-\end_layout
-
-\begin_layout LyX-Code
-PORT_BUTTONS |= BUTTONS_MASK;
-\end_layout
-
-\begin_layout LyX-Code
-/* Configure buttons to trigger pin change interrupt */
-\end_layout
-
-\begin_layout LyX-Code
-PCMSK1 = BUTTONS_MASK;
-\end_layout
-
-\begin_layout LyX-Code
-PCICR = _BV ( PCIE1 );
-\end_layout
-
-\begin_layout LyX-Code
-}
+    manual_x = temp;
 \end_layout
 
 \begin_layout Subsection
