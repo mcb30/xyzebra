@@ -67,7 +67,13 @@ Melisa Kaner
 \end_layout
 
 \begin_layout Abstract
-<insert summary here>
+Our project has been to take a TEP Mini-Mill that was originally programmed
+ with a dedicated control box and the program stored on a Smart Card and
+ bring it back into use in school.
+ We wanted to be able to take Drill files from PCB design software and control
+ the drilling sequence of the mini-mill to automate drilling printed circuit
+ boards.
+ We have also incorporated a laser alignment system.
 \end_layout
 
 \begin_layout Standard
@@ -96,21 +102,7 @@ LatexCommand tableofcontents
 \end_layout
 
 \begin_layout Section
-Abstract - Charlie - 1
-\end_layout
-
-\begin_layout Standard
-Our project has been to take a TEP Mini-Mill that was originally programmed
- with a dedicated control box and the program stored on a Smart Card and
- bring it back into use in school.
- We wanted to be able to take Drill files from PCB design software and control
- the drilling sequence of the mini-mill to automate drilling printed circuit
- boards.
- We have also incorporated a laser alignment system.
-\end_layout
-
-\begin_layout Section
-Problem - Mel - 1
+Problem
 \end_layout
 
 \begin_layout Standard
@@ -133,7 +125,7 @@ Research
 \end_layout
 
 \begin_layout Subsection
-Original Equipment Manufacture - Abi - 1 
+Original Equipment Manufacturer
 \end_layout
 
 \begin_layout Standard
@@ -200,12 +192,10 @@ The Technology Enhancement Programme supports and improves learning and
 \end_layout
 
 \begin_layout Subsection
-Reverse Engineering the Circuit Board - Pippa - 4
+Reverse Engineering the Circuit Board
 \end_layout
 
 \begin_layout Standard
-
-\series bold
 The mini mill had a control box that would allow manual control of the milling
  tool – to move it around in the x and y directions and to operate the solenoid
  that raised and lowered the milling tool.
@@ -217,8 +207,6 @@ The mini mill had a control box that would allow manual control of the milling
 \end_layout
 
 \begin_layout Standard
-
-\series bold
 The driver box in the mill made the x and y stepper motors step and powered
  the ‘z axis’ solenoid.
  This what done with a circuit consisting of MOSFETs used as current drivers
@@ -352,7 +340,7 @@ name "fig:stepper-motor"
 \end_layout
 
 \begin_layout Subsection
-Manual Control - Switches - Mel - 3
+Manual Control - Switches
 \end_layout
 
 \begin_layout Standard
@@ -618,7 +606,7 @@ This method, however, proved to be very limited as it was not possible to
 \end_layout
 
 \begin_layout Subsection
-Using the 4017 Decade Counter - Mel - 2
+Using the 4017 Decade Counter
 \end_layout
 
 \begin_layout Standard
@@ -811,7 +799,7 @@ This worked as expected and it was now possible to proceed onto a more automated
 \end_layout
 
 \begin_layout Subsection
-Using a Laptop - Mel - 2
+Using a Laptop
 \end_layout
 
 \begin_layout Standard
@@ -900,7 +888,7 @@ Reflecting that the long term aim of the project was to interpret drill
 \end_layout
 
 \begin_layout Subsection
-Proof of Concept - Charlie - 2
+Proof of Concept
 \end_layout
 
 \begin_layout Standard
@@ -1253,7 +1241,7 @@ Solution
 \end_layout
 
 \begin_layout Subsection
-Manual Control & RS232 PCBs - Abi - 1
+Manual Control & RS232 PCBs
 \end_layout
 
 \begin_layout Standard
@@ -1361,17 +1349,13 @@ A photo of one of our completed circuit boards
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
 \end_layout
 
 \begin_layout Subsection
-Flowcharts & Event-based Programming - Abi - 3
+Flowcharts & Event-based Programming
 \end_layout
 
 \begin_layout Standard
@@ -1790,7 +1774,7 @@ PCICR = _BV ( PCIE1 );
 \end_layout
 
 \begin_layout Subsection
-CNC Control - Mel - 5/6
+CNC Control
 \end_layout
 
 \begin_layout Standard
@@ -2406,7 +2390,7 @@ As we aren't actually recieving any data from the circuit (we are feeding
 \end_layout
 
 \begin_layout Subsection
-Interpreting Excellon Drill Files - Charlie - Up to 8
+Interpreting Excellon Drill Files
 \end_layout
 
 \begin_layout Standard
@@ -3667,7 +3651,7 @@ serial.c
 \end_layout
 
 \begin_layout Subsection
-Buttons - Abi - 3
+Buttons
 \end_layout
 
 \begin_layout Standard
@@ -3714,7 +3698,7 @@ The button layout used on the interface is shown in figure z.
 \end_layout
 
 \begin_layout Section
-Evaluation and Summary - Abi -1
+Evaluation and Summary
 \end_layout
 
 \begin_layout Section
@@ -3722,7 +3706,7 @@ Future Work
 \end_layout
 
 \begin_layout Subsection
-Callibrations and Matrices - Pippa - 4
+Callibrations and Matrices
 \end_layout
 
 \begin_layout Subsubsection
@@ -3989,7 +3973,7 @@ The transformation matrix for a rotation of an angle
 \end_layout
 
 \begin_layout Section
-Acknowledgements - Pippa - 1
+Acknowledgements
 \end_layout
 
 \begin_layout Standard
