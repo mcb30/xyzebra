@@ -489,32 +489,61 @@ Upon opening up the CNC drill it was found that, as suspected, it was controlled
 \end_layout
 
 \begin_layout Itemize
-Brushless – (if brushed, with friction could create sparks which especially
- in our case is undesirable)
+Brushless
 \end_layout
 
+\begin_deeper
 \begin_layout Itemize
-Good low speed and holding torque – ( can hold particular positions in rotation
- even without a power input)
+if brushed, with friction could create sparks which especially in our case
+ is undesirable
 \end_layout
 
+\end_deeper
 \begin_layout Itemize
-Open loop positioning – ( Can position the shaft in precise, predictable
- positions )
+Good low speed and holding torque
 \end_layout
 
+\begin_deeper
 \begin_layout Itemize
-Load independent ( The rotation speed of the motor is free of the load)
+can hold particular positions in rotation even without a power input
 \end_layout
 
+\end_deeper
+\begin_layout Itemize
+Open loop positioning
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+can position the shaft in precise, predictable positions
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Load independent
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+The rotation speed of the motor is free of the load
+\end_layout
+
+\end_deeper
 \begin_layout Subsection
 Motor Control Circuitry
 \end_layout
 
 \begin_layout Standard
 Current flowing though a coil produces a magnetic field, this in turn, attracts
- a ‘permenanent magnet rotor’ which is connected to the shaft of the motor
- as shown in figure
+ a 
+\begin_inset Quotes eld
+\end_inset
+
+permanent magnet rotor
+\begin_inset Quotes erd
+\end_inset
+
+ which is connected to the shaft of the motor as shown in figure
 \begin_inset space ~
 \end_inset
 
@@ -630,30 +659,41 @@ bits
 \end_layout
 
 \begin_layout Standard
-The switches were arranged in such a way that a logic '1' was created when
- the switch was pressed, this corresponds to the logic levels used later
- on.
+The switches were arranged in such a way that a logic 
+\begin_inset Quotes eld
+\end_inset
+
+1
+\begin_inset Quotes erd
+\end_inset
+
+ was created when the switch was pressed, this corresponds to the logic
+ levels used later on.
 \end_layout
 
 \begin_layout Standard
-In order to find the correct sequence, created a diagram of the stepper
- motor inputs 
-\series bold
-[insert diagram]
-\series default
- and logically work out each of the sequences.
+In order to find the correct sequence, a diagram of the stepper motor inputs
+ was created and used to logically work out each of the sequences.
  As mentioned earlier, if a current is passed through one of the stepper
- motor inputs the polarity of the magnet changes.
- As the stepper motor being used is a unipole stepper motor if any two adjacent
- poles are 'on' at the same time, the polarity between the two magnets essential
-ly cancel out.
+ motor inputs then the polarity of the magnet changes.
+ As the stepper motor being used is a unipolar stepper motor, if any two
+ adjacent poles are 
+\begin_inset Quotes eld
+\end_inset
+
+on
+\begin_inset Quotes erd
+\end_inset
+
+ at the same time, then the polarity between the two magnets essentially
+ cancel out.
  This shouldn't move/rotate the shaft of the motor.
  
 \end_layout
 
 \begin_layout Standard
 After experimenting with different sequences, the following sequences that
- were found worked best:
+ were found to work best:
 \end_layout
 
 \begin_layout Standard
@@ -857,7 +897,6 @@ reference "fig:stepper-4017"
 \end_inset
 
 .
- 
 \end_layout
 
 \begin_layout Standard
@@ -1285,8 +1324,8 @@ B
 \end_layout
 
 \begin_layout Standard
-Using the decade counter (which cycles sequentially through its inputs )
- We could create the inputs of
+The decade counter (which cycles sequentially through its outputs) could
+ be used to create the sequence:
 \end_layout
 
 \begin_layout Standard
@@ -1501,17 +1540,16 @@ This would still rotate the shaft of the stepper motor smoothly, but not
  have as much torque.
  The origionally desired logic could be obtained using an arrangment of
  diodes at the 4017 outputs, but for testing and time purposes, the current
- arrangment served its purpose (As an increased torque wasn't needed in
- this situation).
- 
+ arrangment served its purpose.
+ (An increased torque wasn't needed in this situation.)
 \end_layout
 
 \begin_layout Standard
-To a suitable frequency for the 555 astable, it was taken into account that
- the stepper motor would have to rotate in 200 steps, a frequency of around
- 100Hz (pulsing at 100 times per second) would allow the stepper motor to
- rotate fully in 2 seconds.
- This speed was unlikely tp surpass the limits of the stepper motor.
+To find a suitable frequency for the 555 astable, it was taken into account
+ that the stepper motor would have to rotate in 200 steps, a frequency of
+ around 100Hz (pulsing at 100 times per second) would allow the stepper
+ motor to rotate fully in 2 seconds.
+ This speed was unlikely to surpass the limits of the stepper motor.
  After connecting this to the decade counter, a Darlington Driver was required
  in order to drive the stepper motor without burning out the 4017 decade
  counter.
@@ -1519,9 +1557,25 @@ To a suitable frequency for the 555 astable, it was taken into account that
  of the frequency generator (555 Astable), more specifically, the capacitor
  and resistor values.
  Using the E12 series of resistors, a frequency of around 120Hz was created,
- which is a close enough experimental value to serve its purpose.Values were
- calculated for the needed resistors and capacitors using 1.44/(R1 + 2R2)C.
- The final values used were 1 micro farad, R1 = 10K Ohms, R2 = 1K Ohms.
+ which is a close enough experimental value to serve its purpose.
+ Values were calculated for the needed resistors and capacitors using 
+\begin_inset Formula $1.44\nicefrac{1.44}{\left(R_{1}+R_{2}\right)C}$
+\end_inset
+
+.
+ The final values used were 
+\begin_inset Formula $C=1\mu F$
+\end_inset
+
+, 
+\begin_inset Formula $R_{1}=10k\Omega$
+\end_inset
+
+, 
+\begin_inset Formula $R_{2}=1k\Omega$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
