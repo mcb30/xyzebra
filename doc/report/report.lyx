@@ -90,7 +90,7 @@ Resurrecting the TEP Mini-Mill
  been written on laptops to control the Mini-Mill.
  The final program is able to take an standard Excellon File and drill the
  relevant holes in a printed circuit board, although there are still unresolved
- issues regarding changing drillbits and callibration.
+ issues regarding changing drillbits and calibration.
 \end_layout
 
 \begin_layout Standard
