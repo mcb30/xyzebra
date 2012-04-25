@@ -3080,7 +3080,7 @@ status collapsed
 \noindent
 \align center
 \begin_inset Graphics
-	filename /home/mcb30/work/extcvs/xyzebra/src/flowcharts/Targetflowchart.eps
+	filename ../../src/flowcharts/Targetflowchart.eps
 	height 90theight%
 
 \end_inset
@@ -3550,7 +3550,7 @@ status collapsed
 \noindent
 \align center
 \begin_inset Graphics
-	filename /home/mcb30/work/extcvs/xyzebra/elec/tep_rs232-Back.eps
+	filename ../../elec/tep_rs232-Back.eps
 
 \end_inset
 
@@ -3588,8 +3588,16 @@ Interpreting Excellon Drill Files
 \begin_layout Standard
 The Excellon file format is used to drive CNC milling / drilling machines.
  These files contain information regarding drill specifications and drill
- co-ordinates using the extension '.drl'.
- When a PCB design program produces a template to be chemically etcshed,
+ co-ordinates using the extension 
+\begin_inset Quotes eld
+\end_inset
+
+.drl
+\begin_inset Quotes erd
+\end_inset
+
+.
+ When a PCB design program produces a template to be chemically etched,
  it also creates one of these files to map where holes need to be drilled.
  We receive one of these files over an RS232 link and one of our tasks is
  to write a program which can interpret it.
@@ -3978,7 +3986,7 @@ reference "fig:Interpreter-flowchart"
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Graphics
