@@ -67,13 +67,18 @@ Melisa Kaner
 \end_layout
 
 \begin_layout Abstract
-Our project has been to take a TEP Mini-Mill that was originally programmed
- with a dedicated control box and the program stored on a Smart Card and
- bring it back into use in school.
- We wanted to be able to take Drill files from PCB design software and control
- the drilling sequence of the mini-mill to automate drilling printed circuit
- boards.
- We plan to incorporate a laser alignment system.
+
+\emph on
+Resurrecting the TEP Mini-Mill
+\emph default
+ takes an old milling machine and aims to find a way of controling it without
+ using the current faulty interface.
+ The circuitry within the original machine has been reverse engineered,
+ a printed circuit board has been designed and a series of programs have
+ been written on laptops to control the Mini-Mill.
+ The final program is able to take an standard Excellon File and drill the
+ relevant holes in a printed circuit board, although there are still unresolved
+ issues regarding changing drillbits and callibration.
 \end_layout
 
 \begin_layout Standard
@@ -119,8 +124,9 @@ smart card
 
  for operation, which we don't have.
  Currently, all of the drill holes from printed circuit boards have to be
- drilled by hand, this is both arduous and inefficient when compared to
- the previously automated drill.
+ drilled by hand.
+ This is both arduous and inefficient when compared to the previously automated
+ drill.
  The aim is to replace this control box completely of its functions and
  perhaps refine some of the finer points in the program.
  A more long term aim is to physically replace the control box, giving it
@@ -489,7 +495,7 @@ Upon opening up the CNC drill it was found that, as suspected, it was controlled
 \end_layout
 
 \begin_layout Itemize
-Brushless
+Brushless rotation
 \end_layout
 
 \begin_deeper
@@ -534,8 +540,8 @@ Motor Control Circuitry
 \end_layout
 
 \begin_layout Standard
-Current flowing though a coil produces a magnetic field, this in turn, attracts
- a 
+Current flowing though a coil produces a magnetic field.
+ This in turn, attracts a 
 \begin_inset Quotes eld
 \end_inset
 
@@ -577,7 +583,7 @@ reference "fig:stepper-motor"
 
  is repeated many times before a complete revolution.
  This is created using 4 electromagnets equidistant from one another and
- once each electromagnet is turned on in turn rotating the shaft by 1.8°.
+ for every advance in the sequence the shaft rotates by 1.8°.
  This allows the motor to turn in 
 \series bold
 steps, 
@@ -1546,7 +1552,7 @@ This would still rotate the shaft of the stepper motor smoothly, but not
 
 \begin_layout Standard
 To find a suitable frequency for the 555 astable, it was taken into account
- that the stepper motor would have to rotate in 200 steps, a frequency of
+ that the stepper motor would have to rotate in 200 steps; a frequency of
  around 100Hz (pulsing at 100 times per second) would allow the stepper
  motor to rotate fully in 2 seconds.
  This speed was unlikely to surpass the limits of the stepper motor.
@@ -1635,16 +1641,16 @@ Using a Laptop
 
 \begin_layout Standard
 The rotation speed of the motor depended on the value of the capacitor in
- the astable, wanting to experiment further the values of the capacitor
- were increased to such a degree that there was too much torque and the
- motor wouldn’t turn.
+ the astable.
+ During experimentation, the capacitor value was increased to such a degree
+ that there was too much torque and the motor wouldn’t turn.
  It was here that the limits of the motor were found.
  After confirmation that this method worked, the next step was to utilise
  this with laptops.
  A simple program was devised to scroll through the outputs in a specified
  sequence.
  As with using the laptops, the frequency generated would greatly surpass
- the limit of 200Hz, to recitfy this the program had to integrate 
+ the limit of 200Hz, to rectify this the program had to integrate 
 \begin_inset Quotes eld
 \end_inset
 
@@ -1655,78 +1661,6 @@ sleep
  commands.
  This made it possible to easily to vary the speed of rotation as well as
  the direction.
- 
-\end_layout
-
-\begin_layout Standard
-The next step was to use this idea with the CNC drill, beginning with controllin
-g individual axes.
- The programming lines of the laptops were connected as were the components
- to the inputs of the drill (previously where the control box had been situated).
- A simple program was created to cycle through outputs representing the
- 4017 outputs and it was noted in which direction each of the axes moved.
- To have the drill move to a specific co-ordinate, variables 
-\begin_inset Quotes eld
-\end_inset
-
-x_target
-\begin_inset Quotes erd
-\end_inset
-
- and 
-\begin_inset Quotes eld
-\end_inset
-
-y_target
-\begin_inset Quotes erd
-\end_inset
-
- were created, which would be variables that the 
-\begin_inset Quotes eld
-\end_inset
-
-user
-\begin_inset Quotes erd
-\end_inset
-
- could type in themselves via the command prompt.
- This would be constantly corresponding to the variables 
-\begin_inset Quotes eld
-\end_inset
-
-x_position
-\begin_inset Quotes erd
-\end_inset
-
- and 
-\begin_inset Quotes eld
-\end_inset
-
-y_position
-\begin_inset Quotes erd
-\end_inset
-
- which fittingly correspond to the current positions of the drill, in the
- X and Y axes.
- The drill stops moving once x_target is equal to x_position (the same for
- the Y co-ordinates), if the X and Y positions are less than the targets,
- then the x and y variables increment by one every clocked pulse coming
- from the IC.
-\end_layout
-
-\begin_layout Standard
-Error messages were also implemented in the event of unrecognized co-ordinates
- coming from the interface.
- This ensures that the program doesn't go into an unexpected error state
- during movement or even if the drill is moving to unspecified co-ordinates
- which would prove more troublesome in the future.
-\end_layout
-
-\begin_layout Standard
-Reflecting that the long term aim of the project was to interpret drill
- files, the next milestone would be to directly extrapolate the X and Y
- co-ordinates from the drill files and use them as x_target and y_target
- respectively.
 \end_layout
 
 \begin_layout Subsection
