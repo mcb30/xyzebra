@@ -73,7 +73,7 @@ Our project has been to take a TEP Mini-Mill that was originally programmed
  We wanted to be able to take Drill files from PCB design software and control
  the drilling sequence of the mini-mill to automate drilling printed circuit
  boards.
- We have also incorporated a laser alignment system.
+ We plan to incorporate a laser alignment system.
 \end_layout
 
 \begin_layout Standard
@@ -106,11 +106,19 @@ Problem
 \end_layout
 
 \begin_layout Standard
-At Bancroft's School, there is an old and now unfortunatly, disused CNC
+At Bancroft's School there is an old (and now unfortunately disused) CNC
  drill used to drill holes in PCB circuit boards.
  The control box that is used to both manually and automatically control
- the CNC drill requests a 'smart card' for operation, which we dont have.
- Currently, all od the drill holes from printed circuit boards have to be
+ the CNC drill requests a 
+\begin_inset Quotes eld
+\end_inset
+
+smart card
+\begin_inset Quotes erd
+\end_inset
+
+ for operation, which we don't have.
+ Currently, all of the drill holes from printed circuit boards have to be
  drilled by hand, this is both arduous and inefficient when compared to
  the previously automated drill.
  The aim is to replace this control box completely of its functions and
@@ -136,28 +144,54 @@ At Cambridge, it was realised that in order to get any sensible use out
  it remotely.
  Possible manufactures and suppliers of the product were researched online.
  The first mention of the milling machine which was found online was simply
- the specification: XY movement of the cutting tool
+ the specification:
 \end_layout
 
-\begin_layout Standard
+\begin_layout Itemize
+XY movement of the cutting tool
+\end_layout
+
+\begin_layout Itemize
 150x240mm
 \end_layout
 
-\begin_layout Standard
+\begin_layout Itemize
 Takes standard mini-mill cutters (2mm diameter)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Itemize
 Maximum plunge is 3mm
 \end_layout
 
-\begin_layout Standard
+\begin_layout Itemize
 Cuts up to 5mm plastic in a single pass
 \end_layout
 
 \begin_layout Standard
-After starting with websites such as mindsetsonline.co.uk, tep.org.uk and various
- forums, the few leads which came up were Middlesex University and Mindsets.
+After starting with websites such as 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+mindsetsonline.co.uk
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+tep.org.uk
+\end_layout
+
+\end_inset
+
+ and various forums, the few leads which came up were Middlesex University
+ and Mindsets.
  After numerous phone calls, it was discovered that since the machine was
  made decades ago, it was now considered obsolete.
  As this was the case, there were not any user manuals or instructions for
@@ -171,12 +205,12 @@ After starting with websites such as mindsetsonline.co.uk, tep.org.uk and variou
  it.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Subsubsection
 Who are mindsets and TEP?
 \end_layout
 
 \begin_layout Standard
-Mindsets is a non-profit company owned by middlesex university.
+Mindsets is a non-profit company owned by Middlesex University.
  They work with specialists in the field of science and DT to develop products
  for fun learning and to get children inspired in science and technology.
  
@@ -196,27 +230,195 @@ Reverse Engineering the Circuit Board
 \end_layout
 
 \begin_layout Standard
-The mini mill had a control box that would allow manual control of the milling
- tool – to move it around in the x and y directions and to operate the solenoid
+The mini-mill had a control box that would allow manual control of the milling
+ tool – to move it around in the X and Y directions and to operate the solenoid
  that raised and lowered the milling tool.
  This control box would also allow designs to be stored on a Smart card
  (like a credit card with a memory IC in it).
  We did not want to use this as our project intended to design and store
- programs on a laptop/pc.
+ programs on a laptop/PC.
+\end_layout
+
+\begin_layout Standard
+The driver box in the mill made the X and Y stepper motors step and powered
+ the 
+\begin_inset Quotes eld
+\end_inset
+
+Z axis
+\begin_inset Quotes erd
+\end_inset
+
+ solenoid.
+ This was done with a circuit consisting of MOSFETs used as current drivers
+ for the coils on the X and Y stepper motors.
+ We spent some time at the Cambridge University workshop reverse engineering
+ the circuit used in this driver box – we studied the circuit board and
+ drew up the circuit on a white board (see figures
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Reverse-engineering-the"
+
+\end_inset
+
+ and
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Reverse-engineering-the-1"
+
+\end_inset
+
+).
+ This took a long time but we were pleased to finally produce a circuit
+ diagram for the control circuit (figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Reverse-engineered-circuit"
+
+\end_inset
+
+).
  
 \end_layout
 
 \begin_layout Standard
-The driver box in the mill made the x and y stepper motors step and powered
- the ‘z axis’ solenoid.
- This what done with a circuit consisting of MOSFETs used as current drivers
- for the coils on the x and y stepper motors.
- We spent some time at the Cambridge University workshop reverse engineering
- the circuit used in this driver box – we studied the circuit board and
- drew up the circuit on a white board.
- This took a long time but we were pleased to finally produce a circuit
- diagram for the control circuit.
- 
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename rev_eng_bd_1.jpg
+	width 80text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Reverse engineering the circuit board
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Reverse-engineering-the"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename rev_eng_bd_2.jpg
+	width 80text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Reverse engineering the circuit board
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Reverse-engineering-the-1"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../../elec/XYcontroller.eps
+	height 90theight%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Reverse engineered circuit diagram
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Reverse-engineered-circuit"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -393,56 +595,13 @@ ly cancel out.
 \end_layout
 
 \begin_layout Standard
-\begin_inset Float figure
-wide false
-sideways false
-status collapsed
-
-\begin_layout Plain Layout
-\noindent
-\align center
-\begin_inset Graphics
-	filename ../../elec/XYcontroller.eps
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Switch with Stepper motor
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:Switch-with-Stepper"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
 After experimenting with different sequences, the following sequences that
  were found worked best:
 \end_layout
 
 \begin_layout Standard
+\noindent
+\align center
 \begin_inset Tabular
 <lyxtabular version="3" rows="3" columns="5">
 <features>
