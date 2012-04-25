@@ -3119,81 +3119,92 @@ To check if the producer is equal to the consumer, (The list of co-ordinates
 \end_layout
 
 \begin_layout LyX-Code
-/* Does the produced equal the consumer? */
+    /* Does the producer equal the consumer? */
 \end_layout
 
 \begin_layout LyX-Code
-if ( targets_empty() ){
+    if ( targets_empty() ){
 \end_layout
 
 \begin_layout LyX-Code
-cnc_activity = 0;
+        cnc_activity = 0;
 \end_layout
 
 \begin_layout LyX-Code
-x_target = ( manual_x + x_target );
+        x_target = ( manual_x + x_target );
 \end_layout
 
 \begin_layout LyX-Code
-y_target = ( manual_y + y_target );
+        y_target = ( manual_y + y_target );
 \end_layout
 
 \begin_layout LyX-Code
-if ( manual_drill ) {
+        if ( manual_drill ) {
 \end_layout
 
 \begin_layout LyX-Code
-PORT_SOLENOID &= ~_BV ( SOLENOID );
+            PORT_SOLENOID &= ~_BV ( SOLENOID );
 \end_layout
 
 \begin_layout LyX-Code
-} else {
+        } else {
 \end_layout
 
 \begin_layout LyX-Code
-PORT_SOLENOID |= _BV ( SOLENOID );
+            PORT_SOLENOID |= _BV ( SOLENOID );
 \end_layout
 
 \begin_layout LyX-Code
-}
+        }
 \end_layout
 
 \begin_layout LyX-Code
-return;
+        return;
 \end_layout
 
 \begin_layout LyX-Code
-}
+    }
 \end_layout
 
 \begin_layout LyX-Code
-cnc_activity = 1;
+    cnc_activity = 1;
 \end_layout
 
 \begin_layout LyX-Code
-x_target = targets[ target_cons % NUM_TARGETS ].x;
+    x_target = targets[ target_cons % NUM_TARGETS ].x;
 \end_layout
 
 \begin_layout LyX-Code
-y_target = targets[ target_cons % NUM_TARGETS ].y;
+    y_target = targets[ target_cons % NUM_TARGETS ].y;
 \end_layout
 
 \begin_layout LyX-Code
-target_cons = target_cons +1;
+    target_cons = target_cons +1;
 \end_layout
 
 \begin_layout LyX-Code
-drill_counter = 500;
+    drill_counter = 500;
 \end_layout
 
 \begin_layout LyX-Code
-return;
+    return;
 \end_layout
 
 \begin_layout Standard
-The 'include' function made it possible to use variables being used in other
- branches of programs, i.e the ability to split up one program into smaller
- chunks.
+The 
+\begin_inset Quotes eld
+\end_inset
+
+include
+\begin_inset Quotes erd
+\end_inset
+
+ function made it possible to use variables being used in other branches
+ of programs, i.e.
+\begin_inset space ~
+\end_inset
+
+the ability to split up one program into smaller chunks.
 \end_layout
 
 \begin_layout LyX-Code
@@ -3223,7 +3234,7 @@ The 'include' function made it possible to use variables being used in other
 \begin_layout Standard
 This way, as other members of the group were working on other aspects of
  the program, the complete program would be updated as the group members
- updated theirs individually.ls
+ updated theirs individually.
 \end_layout
 
 \begin_layout Subsubsection
@@ -3231,18 +3242,15 @@ Flow Control
 \end_layout
 
 \begin_layout Standard
-Flow controll is essentially a buffer that is created between (in this case)
+Flow control is essentially a buffer that is created between (in this case)
  the computer and the PCB (circuit) that halts the flow of data untill it
  can be taken in/there is a space for it to be processed.
 \end_layout
 
 \begin_layout Standard
-Though, after referring to our circuit diagram 
-\series bold
-[refer to circuit diagram here]
-\series default
- it was found that there physically wasn't any space on our current circuit
- board for the flow control lines to be implemented.
+Though, after referring to our circuit diagram it was found that there physicall
+y wasn't any space on our current circuit board for the flow control lines
+ to be implemented.
  It was then that we went back to eeschema (circuit diagram software) to
  find any free data lines.
  The lines we had to change were RTS and CTS, R - Recieve, T - Transmitt.When
@@ -3461,9 +3469,116 @@ MISO
 As we aren't actually recieving any data from the circuit (we are feeding
  it co-ordinates), we really only needed one free data line, here we used
  MISO, only 3 connections on the current PCB.
- 
-\series bold
-[summarise with flowcharts and modified circuit diagram?] 
+\end_layout
+
+\begin_layout Standard
+The circuit diagram is shown in figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Circuit-diagram"
+
+\end_inset
+
+ and the corresponding PCB layout in figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:PCB-layout"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../../elec/tep_rs232.eps
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Circuit diagram
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Circuit-diagram"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename /home/mcb30/work/extcvs/xyzebra/elec/tep_rs232-Back.eps
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+PCB layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:PCB-layout"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
