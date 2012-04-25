@@ -3994,7 +3994,7 @@ status open
 \begin_inset Graphics
 	filename ../../src/flowcharts/rs232.eps
 	height 90theight%
-	rotateAngle 270
+	rotateAngle 90
 
 \end_inset
 
