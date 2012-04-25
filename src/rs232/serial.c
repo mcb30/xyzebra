@@ -16,7 +16,8 @@
 #define MAX_DRILL_BITS 10
 #define BUFFER_SIZE 128
 
-enum state { STATE_NONE, STATE_C, STATE_G, STATE_M, STATE_T, STATE_X, STATE_Y, STATE_IGNORE };
+enum state { STATE_NONE, STATE_C, STATE_G, STATE_M, STATE_T, STATE_X,
+STATE_Y, STATE_IGNORE };
 
 struct drillbits {
 	unsigned int diameter;
@@ -153,7 +154,6 @@ static void handle_t ( char data ) {
 		value = data - '0';
 		
 		/* Add data to T_value */
-		printf ( "T: %d\n", T_value );	
 		T_value *= 10;
 		T_value += value;
 		
@@ -204,9 +204,6 @@ static void handle_x_and_y ( char data ) {
 			new_Y_target += value;
 		}
 	}
-
-	else if ( data == '.' ) {
-	}
 	
 	/* If data is Y, set state to Y */
 	else if ( data == 'Y' ) {
@@ -232,7 +229,7 @@ static void handle_x_and_y ( char data ) {
 	}
 
 	/* If data is unusable, set error */
-	else {
+	else if ( data != '.' ) {
 		printf( "\nError: State X or Y, invalid character" );
 		error = 1;
 		reset();
@@ -341,7 +338,8 @@ ISR ( USART_RX_vect ) {
 
 
 static int outbuff_is_full ( void ) {
-	return ( ( consumer % BUFFER_SIZE == producer % BUFFER_SIZE ) && ( consumer != producer ) );
+	return ( ( consumer % BUFFER_SIZE == producer % BUFFER_SIZE ) &&
+( consumer != producer ) );
 }
 
 static int outbuff_is_empty ( void ) {
@@ -375,8 +373,8 @@ static int serial_putchar ( char c, FILE *stream ) {
 	if ( c == '\n' )
 		serial_putchar ( '\r', stream );
 
-	/* If outbuff is not full add the character to the buffer, increase producer
-	   and turn on the ISR */
+	/* If outbuff is not full add the character to the buffer,
+	   increase producer and turn on the ISR */
 	if ( !( outbuff_is_full() ) ) {
 		outbuff[ producer % BUFFER_SIZE ] = c;
 		producer++;
