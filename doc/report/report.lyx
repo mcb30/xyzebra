@@ -5113,7 +5113,7 @@ Code Listings
 Manual input of co-ordinates (Cambridge Workshop Program)
 \end_layout
 
-\begin_layout Standard
+\begin_layout LyX-Code
 \begin_inset CommandInset include
 LatexCommand lstinputlisting
 filename "../../src/dlpusb245_control.c"
@@ -5127,7 +5127,7 @@ filename "../../src/dlpusb245_control.c"
 Interpreting Excellon drill filles
 \end_layout
 
-\begin_layout Standard
+\begin_layout LyX-Code
 \begin_inset CommandInset include
 LatexCommand lstinputlisting
 filename "../../src/rs232/serial.c"
@@ -5135,14 +5135,6 @@ filename "../../src/rs232/serial.c"
 \end_inset
 
 
-\end_layout
-
-\begin_layout Subsection
-Schematics
-\end_layout
-
-\begin_layout Subsection
-PCB Layouts
 \end_layout
 
 \end_body
